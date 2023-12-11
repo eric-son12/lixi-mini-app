@@ -89,7 +89,7 @@ export function LixiButton({
   onClickItem?: () => void;
 }) {
   return (
-    <ButtonStyled className={classCustom} size={size} onClick={onClickItem}>
+    <ButtonStyled className={classCustom} onClick={onClickItem}>
       {icon && icon} &nbsp;
       {title}
     </ButtonStyled>
