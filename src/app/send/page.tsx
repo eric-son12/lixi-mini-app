@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
@@ -8,7 +8,7 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import QrCodeScannerOutlinedIcon from "@mui/icons-material/QrCodeScannerOutlined";
 import LixiButton from "../component/LixiButton";
-import { MainButton, BackButton } from "@twa-dev/sdk/dist/react";
+import { useBackButton, useInitData, useMainButton } from "@tma.js/sdk-react";
 
 const ContainerSend = styled.div`
   padding: 1rem;
@@ -44,6 +44,31 @@ const ContainerSend = styled.div`
 `;
 
 export default function Send() {
+  const mainButton = useMainButton();
+  const backButton = useBackButton();
+
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const onMainButtonClick = () => setCount((prevCount) => prevCount + 1);
+    const onBackButtonClick = () => setCount((prevCount) => prevCount - 1);
+
+    mainButton.enable().show();
+    mainButton.on("click", onMainButtonClick);
+    backButton.on("click", onBackButtonClick);
+
+    return () => {
+      mainButton.off("click", onMainButtonClick);
+      mainButton.hide();
+      backButton.off("click", onBackButtonClick);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    mainButton.setText(`Count is ${count}`);
+  }, [mainButton, count]);
+
   return (
     <ContainerSend>
       <div className="send-info">
@@ -82,8 +107,8 @@ export default function Send() {
       {/* <div className="send-group-action">
         <LixiButton title="Send" />
       </div> */}
-      <BackButton onClick={() => window.history.back()} />
-      <MainButton text="Send" onClick={() => alert("submitted")} />
+      {/* <BackButton onClick={() => window.history.back()} />
+      <MainButton text="Send" onClick={() => alert("submitted")} /> */}
     </ContainerSend>
   );
 }

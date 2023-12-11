@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import styled from "@emotion/styled";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import QRCodeStyling from "qr-code-styling";
+// import QRCodeStyling from "qr-code-styling";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -84,33 +84,33 @@ const ContainerReceive = styled.div`
 `;
 
 export default function Receive() {
-  useEffect(() => {
-    return qrCode();
-  }, []);
+  // useEffect(() => {
+  //   return qrCode();
+  // }, []);
 
-  const qrCode = () => {
-    const qrCode = new QRCodeStyling({
-      width: 300,
-      height: 300,
-      margin: 12,
-      data: "190270hdioashoisahdiosadoiasd",
-      type: "svg",
-      image: "/xec.svg",
-      dotsOptions: {
-        color: "#fff",
-        type: "rounded",
-      },
-      backgroundOptions: {
-        color: "transparent",
-      },
-      imageOptions: {
-        crossOrigin: "anonymous",
-        margin: 20,
-      },
-    });
-    const qrCodeEle = document.getElementById("qrcode") || undefined;
-    qrCode.append(qrCodeEle);
-  };
+  // const qrCode = () => {
+  //   const qrCode = new QRCodeStyling({
+  //     width: 300,
+  //     height: 300,
+  //     margin: 12,
+  //     data: "190270hdioashoisahdiosadoiasd",
+  //     type: "svg",
+  //     image: "/xec.svg",
+  //     dotsOptions: {
+  //       color: "#fff",
+  //       type: "rounded",
+  //     },
+  //     backgroundOptions: {
+  //       color: "transparent",
+  //     },
+  //     imageOptions: {
+  //       crossOrigin: "anonymous",
+  //       margin: 20,
+  //     },
+  //   });
+  //   const qrCodeEle = document.getElementById("qrcode") || undefined;
+  //   qrCode.append(qrCodeEle);
+  // };
   return (
     <ContainerReceive>
       <div className="receive-info">
