@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { TmaSDKLoader } from "./component/TmaSDKLoader";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "./theme/theme";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <TmaSDKLoader>{children}</TmaSDKLoader>
+        <ThemeProvider theme={theme}>
+          <TmaSDKLoader>{children}</TmaSDKLoader>
+          {/* {children} */}
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -45,7 +45,10 @@ export default function Home() {
   const navigateWallet = () => {
     router.push("/wallet");
   };
-  
+
+  const navigateImport = () => {
+    router.push("/import-wallet");
+  };
   return (
     <ContainerHome>
       <FeatureEducation>
@@ -66,6 +69,7 @@ export default function Home() {
         <LixiButton
           title="Import from backup"
           classCustom="no-border-btn import-backup"
+          onClickItem={() => navigateImport()}
         />
       </FunctionalBar>
     </ContainerHome>

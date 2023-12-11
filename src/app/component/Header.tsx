@@ -23,8 +23,6 @@ function Header(props: HeaderProps) {
   return (
     <Section>
       <div>
-        <AccountBalanceWalletOutlinedIcon />
-        &nbsp;
         <InboxOutlinedIcon />
       </div>
       <SettingsOutlinedIcon />

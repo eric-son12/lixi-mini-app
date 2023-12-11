@@ -1,17 +1,21 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useBackButton, useInitData, useMainButton } from "@tma.js/sdk-react";
+import Tooltip, { TooltipProps } from "@mui/material/Tooltip";
+import { TextField } from "@mui/material";
 import styled from "@emotion/styled";
+import QRCodeStyling, {
+  Options as QRCodeStylingOptions,
+} from "qr-code-styling";
+import FormControl from "@mui/material/FormControl";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-// import QRCodeStyling from "qr-code-styling";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputAdornment from "@mui/material/InputAdornment";
-import QrCodeScannerOutlinedIcon from "@mui/icons-material/QrCodeScannerOutlined";
-import DeleteIcon from "@mui/icons-material/Delete";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
+
+const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({}));
 
 const ContainerReceive = styled.div`
   padding: 1rem;
@@ -41,6 +45,10 @@ const ContainerReceive = styled.div`
         }
       }
     }
+    .tooltip-info {
+      padding: 0;
+      align-self: end;
+    }
   }
   .coin-address {
     .address-string {
@@ -48,11 +56,11 @@ const ContainerReceive = styled.div`
       align-items: center;
       justify-content: center;
       padding: 0.5rem;
-      background: #5476eb42;
-      color: #5476eb;
+      background: #4c5054;
+      color: #fff;
       width: fit-content;
       margin: auto;
-      border-radius: 1rem;
+      border-radius: 4px;
       gap: 4px;
       svg {
         font-size: 14px;
@@ -64,94 +72,155 @@ const ContainerReceive = styled.div`
   }
   .receive-form {
     padding: 1rem 0;
-  }
-  .tooltip-info {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 4rem;
-    padding: 1rem;
-    border: 1px solid #5476eb;
-    border-radius: 8px;
-    background: #5476eb42;
-    p {
-      font-size: 12px;
-      letter-spacing: 0.25px;
-      line-height: 20px;
+    .prefix-coin {
+      color: #01abe8;
+      font-size: 14px;
+      font-weight: 600;
     }
   }
 `;
 
-export default function Receive() {
-  // useEffect(() => {
-  //   return qrCode();
-  // }, []);
+const TooltipContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 4rem;
+  padding: 1rem;
+  border: 1px solid #5476eb;
+  border-radius: 8px;
+  background: #4c5054;
+  p {
+    font-size: 12px;
+    letter-spacing: 0.25px;
+    line-height: 20px;
+  }
+`;
 
-  // const qrCode = () => {
-  //   const qrCode = new QRCodeStyling({
-  //     width: 300,
-  //     height: 300,
-  //     margin: 12,
-  //     data: "190270hdioashoisahdiosadoiasd",
-  //     type: "svg",
-  //     image: "/xec.svg",
-  //     dotsOptions: {
-  //       color: "#fff",
-  //       type: "rounded",
-  //     },
-  //     backgroundOptions: {
-  //       color: "transparent",
-  //     },
-  //     imageOptions: {
-  //       crossOrigin: "anonymous",
-  //       margin: 20,
-  //     },
-  //   });
-  //   const qrCodeEle = document.getElementById("qrcode") || undefined;
-  //   qrCode.append(qrCodeEle);
-  // };
+const qrOptions: QRCodeStylingOptions = {
+  width: 300,
+  height: 300,
+  margin: 12,
+  image: "/xec.svg",
+  type: "svg",
+  dotsOptions: {
+    color: "#fff",
+    type: "dots",
+  },
+  cornersSquareOptions: {
+    type: "extra-rounded",
+  },
+  cornersDotOptions: {
+    type: "dot",
+  },
+  backgroundOptions: {
+    color: "transparent",
+  },
+  imageOptions: {
+    margin: 12,
+  },
+};
+
+const useQRCodeStyling = (
+  options: QRCodeStylingOptions
+): QRCodeStyling | null => {
+  //Only do this on the client
+  if (typeof window !== "undefined") {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const QRCodeStylingLib = require("qr-code-styling");
+    const qrCodeStyling: QRCodeStyling = new QRCodeStylingLib(options);
+    return qrCodeStyling;
+  }
+  return null;
+};
+
+export default function Receive() {
+  const mainButton = useMainButton();
+  const backButton = useBackButton();
+  const [address, setAddress] = useState("qp8ks7622cklc7c9pm2d3ktwzctack6njq6q83ed9x");
+  const qrCode = useQRCodeStyling(qrOptions);
+  const ref = useRef<any>(null);
+
+  const onMainButtonClick = () => alert('Click');
+
+  useEffect(() => {
+    mainButton.show();
+    mainButton.setText('Share this');
+    mainButton.on("click", onMainButtonClick);
+
+    backButton.show();
+  }, []);
+
+  useEffect(() => {
+    qrCode?.append(ref.current);
+  }, [ref, qrCode]);
+
+  useEffect(() => {
+    qrCode?.update({ data: address });
+  }, [address, qrCode]);
+
+  const onAddressChange: React.ChangeEventHandler<HTMLInputElement> | undefined = (
+    event
+  ) => {
+    event.preventDefault();
+    setAddress(event.target.value);
+  };
+
+  const TooltipReceive = () => {
+    return (
+      <React.Fragment>
+        <TooltipContainer>
+          <InfoOutlinedIcon />
+          <p>
+            You can copy and share your wallet address by clicking on the
+            address. You can also share your wallet QRCode.
+          </p>
+        </TooltipContainer>
+      </React.Fragment>
+    );
+  };
   return (
     <ContainerReceive>
       <div className="receive-info">
         <img width={96} height={96} src="/request.svg" alt="" />
         <div className="header-receive">
           <h2 className="title">Receive</h2>
-          <Tooltip title="Delete">
+          <HtmlTooltip className="tooltip-info" title={TooltipReceive()}>
             <IconButton>
               <InfoOutlinedIcon />
             </IconButton>
-          </Tooltip>
+          </HtmlTooltip>
         </div>
       </div>
       <div className="receive-form">
         <FormControl fullWidth={true}>
-          <InputLabel htmlFor="outlined-adornment-amount">
-            Request amount (option)
-          </InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-amount"
-            endAdornment={<InputAdornment position="end">XEC</InputAdornment>}
-            label="Amount"
+          <TextField
+            id="address"
+            label="Request amount (option)"
             placeholder="0"
+            color="primary"
+            variant="outlined"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <p className="prefix-coin">XEC</p>
+                </InputAdornment>
+              ),
+            }}
+            // onChange={onAddressChange}
           />
         </FormControl>
       </div>
       <div className="coin-address">
-        <div id="qrcode"></div>
+        <div style={{ textAlign: "center" }} ref={ref}></div>
         <div className="address-string">
           <ContentPasteIcon />
-          <span>19298342189452184527815487214</span>
+          <span>
+            <span style={{ color: "#01abe8" }}>ecash:</span>
+            {address}
+          </span>
         </div>
       </div>
-
-      {/* <div className="tooltip-info">
-        <InfoOutlinedIcon />
-        <p>
-          You can copy and share your wallet address by clicking on the address.
-          You can also share your wallet QRCode.
-        </p>
-      </div> */}
     </ContainerReceive>
   );
 }

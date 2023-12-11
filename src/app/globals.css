@@ -96,7 +96,7 @@
   --dark-warning-border: #ffdf8d;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
@@ -127,7 +127,7 @@
     --card-rgb: 100, 100, 100;
     --card-border-rgb: 200, 200, 200;
   }
-}
+} */
 
 * {
   box-sizing: border-box;
@@ -142,7 +142,6 @@ body {
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
   background: #161b22;
 }
 

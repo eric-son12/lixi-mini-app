@@ -44,30 +44,38 @@ const ContainerSend = styled.div`
 `;
 
 export default function Send() {
-  const mainButton = useMainButton();
-  const backButton = useBackButton();
+  // const mainButton = useMainButton();
+  // const backButton = useBackButton();
 
-  const [count, setCount] = useState(0);
+  // const [count, setCount] = useState(0);
 
-  useEffect(() => {
-    const onMainButtonClick = () => setCount((prevCount) => prevCount + 1);
-    const onBackButtonClick = () => setCount((prevCount) => prevCount - 1);
+  // useEffect(() => {
+  //   const onMainButtonClick = () => setCount((prevCount) => prevCount + 1);
+  //   const onBackButtonClick = () => setCount((prevCount) => prevCount - 1);
 
-    mainButton.enable().show();
-    mainButton.on("click", onMainButtonClick);
-    backButton.on("click", onBackButtonClick);
+  //   mainButton.enable().show();
+  //   mainButton.on("click", onMainButtonClick);
+  //   backButton.on("click", onBackButtonClick);
 
-    return () => {
-      mainButton.off("click", onMainButtonClick);
-      mainButton.hide();
-      backButton.off("click", onBackButtonClick);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  //   return () => {
+  //     mainButton.off("click", onMainButtonClick);
+  //     mainButton.hide();
+  //     backButton.off("click", onBackButtonClick);
+  //   };
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
-  useEffect(() => {
-    mainButton.setText(`Count is ${count}`);
-  }, [mainButton, count]);
+  // useEffect(() => {
+  //   mainButton.setText(`Count is ${count}`);
+  // }, [mainButton, count]);
+
+  // useEffect(() => {
+  //   if (count === 0) {
+  //     backButton.hide();
+  //     return;
+  //   }
+  //   backButton.show();
+  // }, [backButton, count]);
 
   return (
     <ContainerSend>
@@ -80,27 +88,35 @@ export default function Send() {
       </div>
       <div className="send-form">
         <FormControl fullWidth={true}>
-          <InputLabel htmlFor="outlined-adornment-address">
-            Wallet address
-          </InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-address"
-            endAdornment={
-              <InputAdornment position="end">
-                <QrCodeScannerOutlinedIcon />
-              </InputAdornment>
-            }
-            label="Address"
+          <TextField
+            id="address"
+            label="Wallet address"
             placeholder="Paste address here"
+            color="primary"
+            variant="outlined"
+            error
+            helperText="Incorrect address."
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <QrCodeScannerOutlinedIcon />
+                </InputAdornment>
+              ),
+            }}
           />
         </FormControl>
         <FormControl fullWidth={true}>
-          <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-amount"
-            endAdornment={<InputAdornment position="end">XEC</InputAdornment>}
+          <TextField
+            id="amount"
             label="Amount"
             placeholder="0"
+            color="primary"
+            variant="outlined"
+            error
+            helperText="Incorrect amount."
+            InputProps={{
+              endAdornment: <InputAdornment position="end">XEC</InputAdornment>,
+            }}
           />
         </FormControl>
       </div>
