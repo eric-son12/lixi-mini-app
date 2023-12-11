@@ -1,8 +1,9 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { useBackButton, useInitData, useMainButton } from "@tma.js/sdk-react";
+import { useRouter } from "next/navigation";
+import { useBackButton, useMainButton, usePopup } from "@tma.js/sdk-react";
 import Tooltip, { TooltipProps } from "@mui/material/Tooltip";
-import { TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import styled from "@emotion/styled";
 import QRCodeStyling, {
   Options as QRCodeStylingOptions,
@@ -137,17 +138,32 @@ const useQRCodeStyling = (
 export default function Receive() {
   const mainButton = useMainButton();
   const backButton = useBackButton();
-  const [address, setAddress] = useState("qp8ks7622cklc7c9pm2d3ktwzctack6njq6q83ed9x");
+  const popUp = usePopup();
+  const router = useRouter();
+  const [address, setAddress] = useState(
+    "qp8ks7622cklc7c9pm2d3ktwzctack6njq6q83ed9x"
+  );
   const qrCode = useQRCodeStyling(qrOptions);
   const ref = useRef<any>(null);
 
-  const onMainButtonClick = () => alert('Click');
+  const onMainButtonClick = () => {
+    popUp.open({
+      title: 'Popup Title',
+      message: 'Popup Description',
+      buttons: [
+        <Button title="Ok"/>
+      ]
+    })
+  };
+  const onBackButtonClick = () => {
+    router.back();
+  };
 
   useEffect(() => {
     mainButton.show();
-    mainButton.setText('Share this');
+    mainButton.setText("Share this");
     mainButton.on("click", onMainButtonClick);
-
+    backButton.on("click", onBackButtonClick);
     backButton.show();
   }, []);
 
@@ -159,9 +175,9 @@ export default function Receive() {
     qrCode?.update({ data: address });
   }, [address, qrCode]);
 
-  const onAddressChange: React.ChangeEventHandler<HTMLInputElement> | undefined = (
-    event
-  ) => {
+  const onAddressChange:
+    | React.ChangeEventHandler<HTMLInputElement>
+    | undefined = (event) => {
     event.preventDefault();
     setAddress(event.target.value);
   };

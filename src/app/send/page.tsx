@@ -1,14 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useBackButton, usePopup, useMainButton } from "@tma.js/sdk-react";
 import styled from "@emotion/styled";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
-import InputLabel from "@mui/material/InputLabel";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import QrCodeScannerOutlinedIcon from "@mui/icons-material/QrCodeScannerOutlined";
-import LixiButton from "../component/LixiButton";
-import { useBackButton, useInitData, useMainButton } from "@tma.js/sdk-react";
+import { Button } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 const ContainerSend = styled.div`
   padding: 1rem;
@@ -44,39 +43,31 @@ const ContainerSend = styled.div`
 `;
 
 export default function Send() {
-  // const mainButton = useMainButton();
-  // const backButton = useBackButton();
+  const mainButton = useMainButton();
+  const backButton = useBackButton();
+  const popUp = usePopup();
+  const router = useRouter();
 
-  // const [count, setCount] = useState(0);
+  const onMainButtonClick = () => {
+    popUp.open({
+      title: 'Popup Title',
+      message: 'Popup Description',
+      buttons: [
+        <Button title="Ok"/>
+      ]
+    })
+  };
+  const onBackButtonClick = () => {
+    router.back();
+  };
 
-  // useEffect(() => {
-  //   const onMainButtonClick = () => setCount((prevCount) => prevCount + 1);
-  //   const onBackButtonClick = () => setCount((prevCount) => prevCount - 1);
-
-  //   mainButton.enable().show();
-  //   mainButton.on("click", onMainButtonClick);
-  //   backButton.on("click", onBackButtonClick);
-
-  //   return () => {
-  //     mainButton.off("click", onMainButtonClick);
-  //     mainButton.hide();
-  //     backButton.off("click", onBackButtonClick);
-  //   };
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
-  // useEffect(() => {
-  //   mainButton.setText(`Count is ${count}`);
-  // }, [mainButton, count]);
-
-  // useEffect(() => {
-  //   if (count === 0) {
-  //     backButton.hide();
-  //     return;
-  //   }
-  //   backButton.show();
-  // }, [backButton, count]);
-
+  useEffect(() => {
+    mainButton.show();
+    mainButton.setText("Share this");
+    mainButton.on("click", onMainButtonClick);
+    backButton.on("click", onBackButtonClick);
+    backButton.show();
+  }, []);
   return (
     <ContainerSend>
       <div className="send-info">
@@ -120,11 +111,6 @@ export default function Send() {
           />
         </FormControl>
       </div>
-      {/* <div className="send-group-action">
-        <LixiButton title="Send" />
-      </div> */}
-      {/* <BackButton onClick={() => window.history.back()} />
-      <MainButton text="Send" onClick={() => alert("submitted")} /> */}
     </ContainerSend>
   );
 }

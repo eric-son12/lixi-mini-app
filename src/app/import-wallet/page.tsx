@@ -1,16 +1,17 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "@emotion/styled";
 import { useRouter } from "next/navigation";
 import {
+  Button,
   FormControl,
   IconButton,
   InputAdornment,
   TextField,
   Tooltip,
 } from "@mui/material";
+import { useBackButton, useMainButton, usePopup } from "@tma.js/sdk-react";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import QrCodeScannerOutlinedIcon from "@mui/icons-material/QrCodeScannerOutlined";
 
 const ContainerImportWallet = styled.div`
@@ -64,11 +65,31 @@ const ContainerImportWallet = styled.div`
 `;
 
 export default function ImportWallet() {
+  const mainButton = useMainButton();
+  const backButton = useBackButton();
+  const popUp = usePopup();
   const router = useRouter();
 
-  const navigateWallet = () => {
-    router.push("/wallet");
+  const onMainButtonClick = () => {
+    popUp.open({
+      title: 'Popup Title',
+      message: 'Popup Description',
+      buttons: [
+        <Button title="Ok"/>
+      ]
+    })
   };
+  const onBackButtonClick = () => {
+    router.back();
+  };
+
+  useEffect(() => {
+    mainButton.show();
+    mainButton.setText("Import");
+    mainButton.on("click", onMainButtonClick);
+    backButton.on("click", onBackButtonClick);
+    backButton.show();
+  }, []);
 
   return (
     <ContainerImportWallet>
