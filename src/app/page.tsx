@@ -1,9 +1,9 @@
-"use client"
-import { useRouter } from 'next/navigation';
-import styled from '@emotion/styled'
-import LixiButton from './component/LixiButton';
-import { useInitData } from '@tma.js/sdk-react';
-import { useMemo } from 'react';
+"use client";
+import { useRouter } from "next/navigation";
+import styled from "@emotion/styled";
+import LixiButton from "./component/LixiButton";
+import { useInitData } from "@tma.js/sdk-react";
+import { useMemo } from "react";
 
 const ContainerHome = styled.div`
   display: grid;
@@ -49,11 +49,9 @@ const InitData = () => {
 
   const initDataJson = useMemo(() => {
     if (!initData) {
-      return 'Init data is empty.';
+      return "Init data is empty.";
     }
-    const { authDate, chat, hash, canSendAfter, queryId, receiver, user, startParam } = initData;
-
-    return JSON.stringify({
+    const {
       authDate,
       chat,
       hash,
@@ -62,33 +60,42 @@ const InitData = () => {
       receiver,
       user,
       startParam,
-    }, null, ' ');
+    } = initData;
+
+    return JSON.stringify(
+      {
+        authDate,
+        chat,
+        hash,
+        canSendAfter,
+        queryId,
+        receiver,
+        user,
+        startParam,
+      },
+      null,
+      " "
+    );
   }, [initData]);
 
   return (
     <pre>
-      <code>
-        {initDataJson}
-      </code>
+      <code>{initDataJson}</code>
     </pre>
   );
-}
+};
 
-const TestLCS = () => { 
-  let a = '';
-  const lcsAhihi = localStorage.getItem('test');
+const TestLCS = () => {
+  let a = "";
+  const lcsAhihi = localStorage.getItem("test");
   if (!lcsAhihi) {
-    localStorage.setItem('test', 'ahihihi')
+    localStorage.setItem("test", "ahihihi");
   } else {
     a = JSON.parse(lcsAhihi);
   }
 
-  return (
-    <p>
-      {a}
-    </p>
-  )
-}
+  return <p>{a}</p>;
+};
 
 export default function Home() {
   const router = useRouter();
@@ -123,8 +130,10 @@ export default function Home() {
           onClickItem={() => navigateImport()}
         />
       </FunctionalBar>
-      <InitData/>
-      <TestLCS />
+      <div style={{ maxWidth: "100%" }}>
+        <InitData />
+      </div>
+      {/* <TestLCS /> */}
     </ContainerHome>
-  )
+  );
 }
