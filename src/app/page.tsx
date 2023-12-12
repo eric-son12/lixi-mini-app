@@ -2,6 +2,8 @@
 import { useRouter } from 'next/navigation';
 import styled from '@emotion/styled'
 import LixiButton from './component/LixiButton';
+import { useInitData } from '@tma.js/sdk-react';
+import { useMemo } from 'react';
 
 const ContainerHome = styled.div`
   display: grid;
@@ -39,6 +41,55 @@ const FunctionalBar = styled.div`
   row-gap: 0.5rem;
 `;
 
+/**
+ * Displays current application init data.
+ */
+const InitData = () => {
+  const initData = useInitData();
+
+  const initDataJson = useMemo(() => {
+    if (!initData) {
+      return 'Init data is empty.';
+    }
+    const { authDate, chat, hash, canSendAfter, queryId, receiver, user, startParam } = initData;
+
+    return JSON.stringify({
+      authDate,
+      chat,
+      hash,
+      canSendAfter,
+      queryId,
+      receiver,
+      user,
+      startParam,
+    }, null, ' ');
+  }, [initData]);
+
+  return (
+    <pre>
+      <code>
+        {initDataJson}
+      </code>
+    </pre>
+  );
+}
+
+const TestLCS = () => { 
+  let a = '';
+  const lcsAhihi = localStorage.getItem('test');
+  if (!lcsAhihi) {
+    localStorage.setItem('test', 'ahihihi')
+  } else {
+    a = JSON.parse(lcsAhihi);
+  }
+
+  return (
+    <p>
+      {a}
+    </p>
+  )
+}
+
 export default function Home() {
   const router = useRouter();
 
@@ -72,6 +123,8 @@ export default function Home() {
           onClickItem={() => navigateImport()}
         />
       </FunctionalBar>
+      <InitData/>
+      <TestLCS />
     </ContainerHome>
   )
 }
