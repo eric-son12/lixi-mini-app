@@ -5,7 +5,7 @@ import {
   usePopup,
   useMainButton,
   useQRScanner,
-  useHapticFeedback
+  useHapticFeedback,
 } from "@tma.js/sdk-react";
 import { useRouter } from "next/navigation";
 import styled from "@emotion/styled";
@@ -83,28 +83,28 @@ export default function Send() {
   }, [mainButton, backButton]);
 
   const onMainButtonClick = () => {
+    haptic.notificationOccurred("warning");
     popUp
       .open({
         title: "Popup Title",
         message: "Popup Description",
         buttons: [
-          { id: "my-id", type: "cancel" },
-          { id: "my-id", type: "ok" },
+          { id: "send-cancel", type: "cancel" },
+          { id: "send-ok", type: "ok" },
         ],
       })
-      .then(() => {
-        console.log(popUp.isOpened);
+      .then((rs) => {
+        console.log(rs);
       })
-      .catch(() => {
-        console.log(popUp.isOpened);
+      .catch((err) => {
+        console.log(err);
       });
   };
 
   const ScanQRCode = () => {
-    haptic.notificationOccurred('warning');
+    haptic.notificationOccurred("warning");
     scanner.open("Scan the barcode").then((content) => {
       console.log(content);
-      // Output: 'some-data=22l&app=93...'
       setAddress(content || "null");
       scanner.close();
     });
@@ -114,6 +114,14 @@ export default function Send() {
     router.back();
     backButton.hide();
     mainButton.hide();
+  };
+
+  const handleAdress = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAddress(event.target.value);
+  };
+
+  const handleAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAmount(parseInt(event.target.value));
   };
 
   return (
@@ -135,6 +143,7 @@ export default function Send() {
             label="Wallet address"
             placeholder="Paste address here"
             value={address}
+            onChange={handleAdress}
             color="primary"
             variant="outlined"
             error={error}
@@ -157,6 +166,7 @@ export default function Send() {
             label="Amount"
             placeholder="0"
             value={amount}
+            onChange={handleAmount}
             color="primary"
             variant="outlined"
             error={error}

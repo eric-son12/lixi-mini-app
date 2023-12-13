@@ -1,7 +1,12 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useBackButton, useMainButton, usePopup } from "@tma.js/sdk-react";
+import {
+  useBackButton,
+  useHapticFeedback,
+  useMainButton,
+  usePopup,
+} from "@tma.js/sdk-react";
 import Tooltip, { TooltipProps } from "@mui/material/Tooltip";
 import { Button, TextField } from "@mui/material";
 import styled from "@emotion/styled";
@@ -146,6 +151,7 @@ export default function Receive() {
   const mainButton = useMainButton();
   const backButton = useBackButton();
   const popUp = usePopup();
+  const haptic = useHapticFeedback();
 
   useEffect(() => {
     backButton.show();
@@ -160,11 +166,10 @@ export default function Receive() {
 
   const onMainButtonClick = () => {
     popUp.open({
-      title: 'Receive info',
-      message: 'You can copy and share your wallet address by clicking on the address. You can also share your wallet QRCode.',
-      buttons: [
-        <Button title="Ok"/>
-      ]
+      title: "Receive info",
+      message:
+        "You can copy and share your wallet address by clicking on the address. You can also share your wallet QRCode.",
+      buttons: [{ id: "receive-ok", type: "ok" }],
     });
     popUp.isOpened;
   };
@@ -173,6 +178,32 @@ export default function Receive() {
     router.back();
     backButton.hide();
     mainButton.hide();
+  };
+
+  const copyTextToClipboard = () => {
+    haptic.impactOccurred("medium");
+
+    if (!navigator.clipboard) {
+      var textArea = document.createElement("textarea");
+      textArea.value = address;
+
+      textArea.style.top = "0";
+      textArea.style.left = "0";
+      textArea.style.position = "fixed";
+
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+      try {
+        var successful = document.execCommand("copy");
+        var msg = successful ? "successful" : "unsuccessful";
+      } catch (err) {}
+
+      document.body.removeChild(textArea);
+
+      return;
+    }
   };
 
   useEffect(() => {
@@ -239,7 +270,7 @@ export default function Receive() {
       </div>
       <div className="coin-address">
         <div style={{ textAlign: "center" }} ref={ref}></div>
-        <div className="address-string">
+        <div className="address-string" onClick={copyTextToClipboard}>
           <ContentPasteIcon />
           <span>
             <span style={{ color: "#01abe8" }}>ecash:</span>
