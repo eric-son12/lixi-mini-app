@@ -1,8 +1,10 @@
 "use client";
-import React from "react";
-import styled from '@emotion/styled'
-import LixiButton from "../component/LixiButton";
+import React, { useState } from "react";
+import styled from "@emotion/styled";
 import { useRouter } from "next/navigation";
+import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
+import LixiButton from "../component/LixiButton";
 import Header from "../component/Header";
 
 const ContainerWallet = styled.div``;
@@ -23,20 +25,42 @@ const WalletInfoContainer = styled.div`
     width: 100%;
     margin: 1rem 0;
     align-self: flex-start;
-    .title-balance {
-      // font-size: 18px;
-      // font-weight: 500;
+    .balance-header {
+      display: flex;
+      justify-content: space-between;
+      .title-balance {
+        font-size: 18px;
+        font-weight: 500;
+      }
     }
-    .amount {
-      font-size: 26px;
+    .balance-content {
       text-align: center;
       padding: 2rem;
       background: #303031;
       margin: 1rem 0;
-      border-radius: 1rem;
-      span {
+      border-radius: 0.5rem;
+      .amount {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        font-size: 26px;
         font-weight: 500;
-        font-size: 12px;
+        span {
+          font-weight: 400;
+          font-size: 16px;
+          letter-spacing: 0.25px;
+          opacity: 0.6;
+        }
+        svg {
+          opacity: 0.6;
+        }
+      }
+      .fiat-rate {
+        font-weight: 400;
+        font-size: 16px;
+        letter-spacing: 0.25px;
+        opacity: 0.6;
       }
     }
   }
@@ -49,19 +73,57 @@ const WalletInfoContainer = styled.div`
       width: 100% !important;
     }
   }
+  .transaction-history {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #303031;
+    border-radius: 1rem;
+    .title {
+      font-size: 12px;
+      font-weight: 400;
+      text-transform: uppercase;
+    }
+    .transaction-detail {
+      padding: 1rem 0;
+    }
+    .ghost-town {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 2rem;
+      img {
+        max-width: 20%;
+      }
+      .blank-title {
+        font-size: 18px;
+        font-weight: 500;
+        letter-spacing: 0.25px;
+      }
+      .blank-subtitle {
+        text-align: center;
+        font-size: 14px;
+        letter-spacing: 0.25px;
+      }
+    }
+  }
 `;
 
 export default function Wallet() {
-    const router = useRouter();
-    const navigateReceive = () => {
-        router.push('/receive');
-    }
-    const navigateSend = () => {
-        router.push('/send');
-    }
+  const router = useRouter();
+  const [hideBalance, setHideBalance] = useState<boolean>(false);
+  const navigateReceive = () => {
+    router.push("/receive");
+  };
+  const navigateSend = () => {
+    router.push("/send");
+  };
   return (
     <ContainerWallet>
-      <Header/>
+      <Header />
       <WalletInfoContainer>
         <div className="currency-info">
           <img className="curency-image" src="/xec.svg" alt="" />
@@ -71,30 +133,59 @@ export default function Wallet() {
           </div>
         </div>
         <div className="balance">
-          <h2 className="title-balance">Balance</h2>
-          <p className="amount">
-            1,000 <span>XEC</span>
-          </p>
+          <div className="balance-header">
+            <h2 className="title-balance">Total balance:</h2>
+            <div onClick={() => setHideBalance(!hideBalance)}>
+              {hideBalance ? (
+                <RemoveRedEyeOutlinedIcon />
+              ) : (
+                <VisibilityOffOutlinedIcon />
+              )}
+            </div>
+          </div>
+          <div className="balance-content">
+            {hideBalance ? (
+              <>
+                <p className="amount">******</p>
+                <p className="fiat-rate">******</p>
+              </>
+            ) : (
+              <>
+                <p className="amount">
+                  14,624 <span>XEC</span>
+                </p>
+                <p className="fiat-rate">~ 2.20 USD</p>
+              </>
+            )}
+          </div>
         </div>
         <div className="group-action-wallet">
-          <LixiButton icon={<img src="/send.svg"/>} title="Send" onClickItem={() => navigateSend()}/>
-          <LixiButton icon={<img src="/request.svg"/>} title="Receive" onClickItem={() => navigateReceive()}/>
+          <LixiButton
+            icon={<img src="/send.svg" />}
+            title="Send"
+            onClickItem={() => navigateSend()}
+          />
+          <LixiButton
+            icon={<img src="/request.svg" />}
+            title="Receive"
+            onClickItem={() => navigateReceive()}
+          />
         </div>
-        {/* <div className="list-coin-available">
-        <div className="coin-item">
-          <img src="" alt="" />
-          <div>
-            <p>eCash</p>
-            <p>
-              <span>9999</span> XEC
-            </p>
-          </div>
-          <div>
-            <span>$</span>
-            <span>14.12</span>
+        <div className="transaction-history">
+          <h5 className="title">Transaction History</h5>
+          <div className="transaction-detail">
+            {/* <div className="item">
+
+            </div> */}
+            <div className="ghost-town">
+              <img src="/ghost.svg" alt="" />
+              <h4 className="blank-title">No History Yet</h4>
+              <p className="blank-subtitle">
+                Once you start making transactions, they will appear here.
+              </p>
+            </div>
           </div>
         </div>
-      </div> */}
       </WalletInfoContainer>
     </ContainerWallet>
   );

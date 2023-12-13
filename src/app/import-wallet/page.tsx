@@ -1,18 +1,23 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { useRouter } from "next/navigation";
 import {
+  Alert,
+  Backdrop,
   Button,
+  CircularProgress,
   FormControl,
   IconButton,
   InputAdornment,
+  Snackbar,
   TextField,
   Tooltip,
 } from "@mui/material";
 import { useBackButton, useMainButton, usePopup } from "@tma.js/sdk-react";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import QrCodeScannerOutlinedIcon from "@mui/icons-material/QrCodeScannerOutlined";
+import { CheckCircleOutline } from "@mui/icons-material";
 
 const ContainerImportWallet = styled.div`
   padding: 1rem;
@@ -29,7 +34,7 @@ const ContainerImportWallet = styled.div`
       justify-content: space-between;
       align-items: baseline;
       .title {
-        margin-top: 2rem;
+        margin-top: 1rem;
       }
       .subtitle {
         span {
@@ -65,10 +70,22 @@ const ContainerImportWallet = styled.div`
 `;
 
 export default function ImportWallet() {
+  const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [seedPhrase, setSeedPhrase] = useState<string>("");
   const mainButton = useMainButton();
   const backButton = useBackButton();
   const popUp = usePopup();
-  const router = useRouter();
+
+  useEffect(() => {
+    mainButton.show();
+    mainButton.setText("Import");
+    mainButton.on("click", onMainButtonClick);
+    backButton.on("click", onBackButtonClick);
+    backButton.show();
+  }, []);
 
   const onMainButtonClick = () => {
     popUp.open({
@@ -79,24 +96,50 @@ export default function ImportWallet() {
       ]
     })
   };
+
   const onBackButtonClick = () => {
     router.back();
+    backButton.hide();
   };
 
-  useEffect(() => {
-    mainButton.show();
-    mainButton.setText("Import");
-    mainButton.on("click", onMainButtonClick);
-    backButton.on("click", onBackButtonClick);
-    backButton.show();
-  }, []);
+  const handleSeedPhrase = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSeedPhrase(event.target.value);
+  };
+
+  const importWallet = () => {
+    let result = false;
+    result =
+      seedPhrase ===
+      "firm panther globe worry affair solve monitor reason carpet yellow return labor"
+        ? true
+        : false;
+    // Call API to import seed phrase
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+    if (result) {
+      setError(false);
+      setSuccess(true);
+      setTimeout(() => {
+        router.push("/wallet");
+      }, 1000);
+    } else {
+      setError(true);
+      setSuccess(false);
+    }
+  };
+
+  const handleClose = () => {
+    setLoading(false);
+  };
 
   return (
     <ContainerImportWallet>
       <div className="receive-info">
         <img width={96} height={96} src="/import.svg" alt="" />
         <div className="header-receive">
-          <h2 className="title">Import Account</h2>
+          <h2 className="title">Import</h2>
           <Tooltip title={"Test"}>
             <IconButton>
               <InfoOutlinedIcon />
@@ -119,12 +162,37 @@ export default function ImportWallet() {
                 </InputAdornment>
               ),
             }}
+            value={seedPhrase}
+            onChange={handleSeedPhrase}
             required
             multiline
             rows={5}
+            error={error}
+            helperText={error && "Valid mnemonic seed phrase required"}
           />
         </FormControl>
       </div>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+        onClick={handleClose}
+      >
+        <CircularProgress color={"inherit"} />
+        {/* <Alert
+          icon={<CheckCircleOutline fontSize="inherit" />}
+          severity="success"
+        >
+          Import wallet success — Check it out!
+        </Alert> */}
+      </Backdrop>
+      <Snackbar
+        open={success}
+        autoHideDuration={2000}
+        onClose={handleClose}
+        message="Import wallet success — Check it out!"
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      />
+      <Button onClick={importWallet}>Import</Button>
     </ContainerImportWallet>
   );
 }

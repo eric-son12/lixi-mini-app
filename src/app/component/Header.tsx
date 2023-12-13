@@ -10,8 +10,8 @@ const Section = styled.div`
   display: flex;
   justify-content: space-between;
   svg {
-    font-size: 28px;
-    color: var(--color-primary);
+    font-size: 24px;
+    color: #0088cc;
   }
 `;
 
@@ -23,7 +23,7 @@ function Header(props: HeaderProps) {
   return (
     <Section>
       <div>
-        <InboxOutlinedIcon />
+        {/* <InboxOutlinedIcon /> */}
       </div>
       <SettingsOutlinedIcon />
     </Section>

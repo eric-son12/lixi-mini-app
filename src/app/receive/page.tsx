@@ -37,7 +37,7 @@ const ContainerReceive = styled.div`
       justify-content: space-between;
       align-items: baseline;
       .title {
-        margin-top: 2rem;
+        margin-top: 1rem;
       }
       .subtitle {
         span {
@@ -136,36 +136,43 @@ const useQRCodeStyling = (
 };
 
 export default function Receive() {
-  const mainButton = useMainButton();
-  const backButton = useBackButton();
-  const popUp = usePopup();
   const router = useRouter();
-  const [address, setAddress] = useState(
+  const [address, setAddress] = useState<string>(
     "qp8ks7622cklc7c9pm2d3ktwzctack6njq6q83ed9x"
   );
   const qrCode = useQRCodeStyling(qrOptions);
   const ref = useRef<any>(null);
 
+  const mainButton = useMainButton();
+  const backButton = useBackButton();
+  const popUp = usePopup();
+
+  useEffect(() => {
+    backButton.show();
+    mainButton.show();
+    mainButton.setText("Share this");
+  }, []);
+
+  useEffect(() => {
+    mainButton.on("click", onMainButtonClick);
+    backButton.on("click", onBackButtonClick);
+  }, [mainButton, backButton]);
+
   const onMainButtonClick = () => {
     popUp.open({
-      title: 'Popup Title',
-      message: 'Popup Description',
+      title: 'Receive info',
+      message: 'You can copy and share your wallet address by clicking on the address. You can also share your wallet QRCode.',
       buttons: [
         <Button title="Ok"/>
       ]
-    })
-  };
-  const onBackButtonClick = () => {
-    router.back();
+    });
+    popUp.isOpened;
   };
 
-  useEffect(() => {
-    mainButton.show();
-    mainButton.setText("Share this");
-    mainButton.on("click", onMainButtonClick);
-    backButton.on("click", onBackButtonClick);
-    backButton.show();
-  }, []);
+  const onBackButtonClick = () => {
+    router.back();
+    backButton.hide();
+  };
 
   useEffect(() => {
     qrCode?.append(ref.current);
@@ -195,17 +202,19 @@ export default function Receive() {
       </React.Fragment>
     );
   };
+
   return (
     <ContainerReceive>
       <div className="receive-info">
         <img width={96} height={96} src="/request.svg" alt="" />
         <div className="header-receive">
           <h2 className="title">Receive</h2>
-          <HtmlTooltip className="tooltip-info" title={TooltipReceive()}>
+          <InfoOutlinedIcon />
+          {/* <HtmlTooltip className="tooltip-info" title={TooltipReceive()}>
             <IconButton>
               <InfoOutlinedIcon />
             </IconButton>
-          </HtmlTooltip>
+          </HtmlTooltip> */}
         </div>
       </div>
       <div className="receive-form">

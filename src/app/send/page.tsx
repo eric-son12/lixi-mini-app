@@ -1,13 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useBackButton, usePopup, useMainButton } from "@tma.js/sdk-react";
+import { Button } from "@mui/material";
+import { useRouter } from "next/navigation";
 import styled from "@emotion/styled";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import QrCodeScannerOutlinedIcon from "@mui/icons-material/QrCodeScannerOutlined";
-import { Button } from "@mui/material";
-import { useRouter } from "next/navigation";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 const ContainerSend = styled.div`
   padding: 1rem;
@@ -19,13 +20,18 @@ const ContainerSend = styled.div`
       align-self: center;
       filter: drop-shadow(2px 4px 6px black);
     }
-    .title {
-      margin-top: 2rem;
-    }
-    .subtitle {
-      span {
-        font-size: 12px;
-        color: #d5d5d5;
+    .header-send {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      .title {
+        margin-top: 1rem;
+      }
+      .subtitle {
+        span {
+          font-size: 12px;
+          color: #d5d5d5;
+        }
       }
     }
   }
@@ -34,6 +40,11 @@ const ContainerSend = styled.div`
     flex-direction: column;
     gap: 1rem;
     margin: 2rem 0;
+    .prefix-coin {
+      color: #01abe8;
+      font-size: 14px;
+      font-weight: 600;
+    }
   }
   .send-group-action {
     button {
@@ -43,41 +54,53 @@ const ContainerSend = styled.div`
 `;
 
 export default function Send() {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [address, setAddress] = useState<string>("");
+  const [amount, setAmount] = useState<number>(0);
   const mainButton = useMainButton();
   const backButton = useBackButton();
   const popUp = usePopup();
   const router = useRouter();
 
-  const onMainButtonClick = () => {
-    popUp.open({
-      title: 'Popup Title',
-      message: 'Popup Description',
-      buttons: [
-        <Button title="Ok"/>
-      ]
-    })
-  };
-  const onBackButtonClick = () => {
-    router.back();
-  };
-
   useEffect(() => {
     mainButton.show();
-    mainButton.setText("Share this");
-    mainButton.on("click", onMainButtonClick);
-    backButton.on("click", onBackButtonClick);
+    mainButton.setText("Send");
     backButton.show();
   }, []);
+
+  useEffect(() => {
+    mainButton.on("click", onMainButtonClick);
+    backButton.on("click", onBackButtonClick);
+  }, [mainButton, backButton]);
+
+  const onMainButtonClick = () => {
+    popUp.open({
+      title: "Popup Title",
+      message: "Popup Description",
+      buttons: [<Button title="Ok" />],
+    });
+  };
+
+  const onBackButtonClick = () => {
+    router.back();
+    backButton.hide();
+  };
+
   return (
     <ContainerSend>
       <div className="send-info">
         <img width={96} height={96} src="/send.svg" alt="" />
-        <h2 className="title">Send</h2>
+        <div className="header-send">
+          <h2 className="title">Send</h2>
+          <InfoOutlinedIcon />
+        </div>
         <p className="subtitle">
           <span>Available:</span> 1,000 XEC
         </p>
       </div>
-      <div className="send-form">
+      <form className="send-form">
         <FormControl fullWidth={true}>
           <TextField
             id="address"
@@ -85,8 +108,8 @@ export default function Send() {
             placeholder="Paste address here"
             color="primary"
             variant="outlined"
-            error
-            helperText="Incorrect address."
+            error={error}
+            helperText={error && "Incorrect address."}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -99,18 +122,23 @@ export default function Send() {
         <FormControl fullWidth={true}>
           <TextField
             id="amount"
+            type="number"
             label="Amount"
             placeholder="0"
             color="primary"
             variant="outlined"
-            error
-            helperText="Incorrect amount."
+            error={error}
+            helperText={error && "Invalid amount."}
             InputProps={{
-              endAdornment: <InputAdornment position="end">XEC</InputAdornment>,
+              endAdornment: (
+                <InputAdornment position="end">
+                  <p className="prefix-coin">XEC</p>
+                </InputAdornment>
+              ),
             }}
           />
         </FormControl>
-      </div>
+      </form>
     </ContainerSend>
   );
 }

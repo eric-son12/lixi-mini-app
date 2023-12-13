@@ -18,6 +18,7 @@ const ButtonStyled = styled(Button)`
   background: var(--color-primary);
   font-size: 14px;
   text-transform: capitalize;
+  border-radius: 1rem;
   .anticon-custom {
     svg {
       filter: var(--filter-svg-white-color) !important;

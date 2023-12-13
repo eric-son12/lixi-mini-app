@@ -44,46 +44,46 @@ const FunctionalBar = styled.div`
 /**
  * Displays current application init data.
  */
-const InitData = () => {
-  const initData = useInitData();
+// const InitData = () => {
+//   const initData = useInitData();
 
-  const initDataJson = useMemo(() => {
-    if (!initData) {
-      return "Init data is empty.";
-    }
-    const {
-      authDate,
-      chat,
-      hash,
-      canSendAfter,
-      queryId,
-      receiver,
-      user,
-      startParam,
-    } = initData;
+//   const initDataJson = useMemo(() => {
+//     if (!initData) {
+//       return "Init data is empty.";
+//     }
+//     const {
+//       authDate,
+//       chat,
+//       hash,
+//       canSendAfter,
+//       queryId,
+//       receiver,
+//       user,
+//       startParam,
+//     } = initData;
 
-    return JSON.stringify(
-      {
-        authDate,
-        chat,
-        hash,
-        canSendAfter,
-        queryId,
-        receiver,
-        user,
-        startParam,
-      },
-      null,
-      " "
-    );
-  }, [initData]);
+//     return JSON.stringify(
+//       {
+//         authDate,
+//         chat,
+//         hash,
+//         canSendAfter,
+//         queryId,
+//         receiver,
+//         user,
+//         startParam,
+//       },
+//       null,
+//       " "
+//     );
+//   }, [initData]);
 
-  return (
-    <pre>
-      <code>{initDataJson}</code>
-    </pre>
-  );
-};
+//   return (
+//     <pre>
+//       <code>{initDataJson}</code>
+//     </pre>
+//   );
+// };
 
 const TestLCS = () => {
   let a = "";
@@ -130,9 +130,9 @@ export default function Home() {
           onClickItem={() => navigateImport()}
         />
       </FunctionalBar>
-      <div style={{ maxWidth: "100%" }}>
+      {/* <div style={{ maxWidth: "100%" }}>
         <InitData />
-      </div>
+      </div> */}
       {/* <TestLCS /> */}
     </ContainerHome>
   );
