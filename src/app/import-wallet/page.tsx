@@ -100,6 +100,7 @@ export default function ImportWallet() {
   const onBackButtonClick = () => {
     router.back();
     backButton.hide();
+    mainButton.hide();
   };
 
   const handleSeedPhrase = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -123,6 +124,7 @@ export default function ImportWallet() {
       setSuccess(true);
       setTimeout(() => {
         router.push("/wallet");
+        mainButton.hide();
       }, 1000);
     } else {
       setError(true);

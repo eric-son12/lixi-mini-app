@@ -1,6 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useBackButton, usePopup, useMainButton } from "@tma.js/sdk-react";
+import {
+  useBackButton,
+  usePopup,
+  useMainButton,
+  useQRScanner,
+} from "@tma.js/sdk-react";
 import { Button } from "@mui/material";
 import { useRouter } from "next/navigation";
 import styled from "@emotion/styled";
@@ -54,6 +59,7 @@ const ContainerSend = styled.div`
 `;
 
 export default function Send() {
+  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
@@ -62,7 +68,7 @@ export default function Send() {
   const mainButton = useMainButton();
   const backButton = useBackButton();
   const popUp = usePopup();
-  const router = useRouter();
+  const scanner = useQRScanner();
 
   useEffect(() => {
     mainButton.show();
@@ -76,16 +82,33 @@ export default function Send() {
   }, [mainButton, backButton]);
 
   const onMainButtonClick = () => {
-    popUp.open({
-      title: "Popup Title",
-      message: "Popup Description",
-      buttons: [<Button title="Ok" />],
+    popUp
+      .open({
+        title: "Popup Title",
+        message: "Popup Description",
+        buttons: [<Button title="Ok" />],
+      })
+      .then(() => {
+        console.log(popUp.isOpened);
+      })
+      .catch(() => {
+        console.log(popUp.isOpened);
+      });
+  };
+
+  const ScanQRCode = () => {
+    scanner.open("Scan the barcode").then((content) => {
+      console.log(content);
+      // Output: 'some-data=22l&app=93...'
+      setAddress(content || "null");
+      scanner.close();
     });
   };
 
   const onBackButtonClick = () => {
     router.back();
     backButton.hide();
+    mainButton.hide();
   };
 
   return (
@@ -113,7 +136,9 @@ export default function Send() {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <QrCodeScannerOutlinedIcon />
+                  <div onClick={ScanQRCode}>
+                    <QrCodeScannerOutlinedIcon />
+                  </div>
                 </InputAdornment>
               ),
             }}

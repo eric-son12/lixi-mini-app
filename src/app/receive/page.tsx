@@ -172,6 +172,7 @@ export default function Receive() {
   const onBackButtonClick = () => {
     router.back();
     backButton.hide();
+    mainButton.hide();
   };
 
   useEffect(() => {
