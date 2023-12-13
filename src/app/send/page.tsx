@@ -5,8 +5,8 @@ import {
   usePopup,
   useMainButton,
   useQRScanner,
+  useHapticFeedback
 } from "@tma.js/sdk-react";
-import { Button } from "@mui/material";
 import { useRouter } from "next/navigation";
 import styled from "@emotion/styled";
 import FormControl from "@mui/material/FormControl";
@@ -69,6 +69,7 @@ export default function Send() {
   const backButton = useBackButton();
   const popUp = usePopup();
   const scanner = useQRScanner();
+  const haptic = useHapticFeedback();
 
   useEffect(() => {
     mainButton.show();
@@ -86,7 +87,10 @@ export default function Send() {
       .open({
         title: "Popup Title",
         message: "Popup Description",
-        buttons: [<Button title="Ok" />],
+        buttons: [
+          { id: "my-id", type: "cancel" },
+          { id: "my-id", type: "ok" },
+        ],
       })
       .then(() => {
         console.log(popUp.isOpened);
@@ -97,6 +101,7 @@ export default function Send() {
   };
 
   const ScanQRCode = () => {
+    haptic.notificationOccurred('warning');
     scanner.open("Scan the barcode").then((content) => {
       console.log(content);
       // Output: 'some-data=22l&app=93...'
@@ -129,6 +134,7 @@ export default function Send() {
             id="address"
             label="Wallet address"
             placeholder="Paste address here"
+            value={address}
             color="primary"
             variant="outlined"
             error={error}
@@ -150,6 +156,7 @@ export default function Send() {
             type="number"
             label="Amount"
             placeholder="0"
+            value={amount}
             color="primary"
             variant="outlined"
             error={error}

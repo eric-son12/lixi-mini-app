@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { useRouter } from "next/navigation";
+import { useHapticFeedback } from "@tma.js/sdk-react";
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import LixiButton from "../component/LixiButton";
@@ -115,12 +116,21 @@ const WalletInfoContainer = styled.div`
 export default function Wallet() {
   const router = useRouter();
   const [hideBalance, setHideBalance] = useState<boolean>(false);
+  const haptic = useHapticFeedback();
+
   const navigateReceive = () => {
     router.push("/receive");
   };
+
   const navigateSend = () => {
     router.push("/send");
   };
+
+  const handleHideBalance = () => {
+    haptic.impactOccurred('heavy');
+    setHideBalance(!hideBalance);
+  }
+
   return (
     <ContainerWallet>
       <Header />
@@ -135,7 +145,7 @@ export default function Wallet() {
         <div className="balance">
           <div className="balance-header">
             <h2 className="title-balance">Total balance:</h2>
-            <div onClick={() => setHideBalance(!hideBalance)}>
+            <div onClick={handleHideBalance}>
               {hideBalance ? (
                 <RemoveRedEyeOutlinedIcon />
               ) : (
