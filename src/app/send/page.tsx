@@ -14,7 +14,26 @@ import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import QrCodeScannerOutlinedIcon from "@mui/icons-material/QrCodeScannerOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { Popup, postEvent } from '@tma.js/sdk';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Slide,
+} from "@mui/material";
+import { TransitionProps } from "@mui/material/transitions";
+import PersonIcon from "@mui/icons-material/Person";
+
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>;
+  },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const ContainerSend = styled.div`
   padding: 1rem;
@@ -72,7 +91,16 @@ export default function Send() {
   const popUp = usePopup();
   const scanner = useQRScanner();
   const haptic = useHapticFeedback();
-  const popup = new Popup('6.3', postEvent);
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     mainButton.enable().show();
@@ -87,27 +115,22 @@ export default function Send() {
 
   const onMainButtonClick = () => {
     haptic.notificationOccurred("warning");
-    // popUp
-    //   .open({
-    //     title: "Popup Title",
-    //     message: "Popup Description",
-    //     buttons: [
-    //       { id: "send-cancel", type: "cancel" },
-    //       { id: "send-ok", type: "ok" },
-    //     ],
-    //   })
-    //   .then((rs) => {
-    //     console.log(rs);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-    console.log('Main button clicked!');
-    popup.open({
-      title: 'Hello!',
-      message: 'Here is a test message.',
-      buttons: [{ id: 'my-id', type: 'default', text: 'Default text' }]
-    });
+    popUp
+      .open({
+        title: "Popup Title",
+        message: "Popup Description",
+        buttons: [
+          { id: "send-cancel", type: "cancel" },
+          { id: "send-ok", type: "ok" },
+        ],
+      })
+      .then((rs) => {
+        console.log(rs);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    console.log("Main button clicked!");
   };
 
   const ScanQRCode = () => {
@@ -141,82 +164,106 @@ export default function Send() {
   };
 
   return (
-    <ContainerSend>
-      <div className="send-info">
-        <img width={96} height={96} src="/send.svg" alt="" />
-        <div className="header-send">
-          <h2 className="title">Send</h2>
-          <InfoOutlinedIcon />
+    <>
+      <ContainerSend>
+        <div className="send-info">
+          <img width={96} height={96} src="/send.svg" alt="" />
+          <div className="header-send">
+            <h2 className="title">Send</h2>
+            <div onClick={handleClickOpen}>
+              <InfoOutlinedIcon />
+            </div>
+          </div>
+          <p className="subtitle">
+            <span>Available:</span> 1,000 XEC
+          </p>
         </div>
-        <p className="subtitle">
-          <span>Available:</span> 1,000 XEC
-        </p>
-      </div>
-      <form className="send-form">
-        <FormControl fullWidth={true}>
-          <TextField
-            id="handleName"
-            label="Handle name (option)"
-            placeholder="Input handle name"
-            value={handleName}
-            onChange={handleInputName}
-            color="primary"
-            variant="outlined"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <div onClick={ScanQRCode}>
-                    <QrCodeScannerOutlinedIcon />
-                  </div>
-                </InputAdornment>
-              ),
-            }}
-          />
-        </FormControl>
-        <FormControl fullWidth={true}>
-          <TextField
-            id="address"
-            label="Wallet address"
-            placeholder="Paste address here"
-            value={address}
-            onChange={handleAdress}
-            color="primary"
-            variant="outlined"
-            error={error}
-            helperText={error && "Incorrect address."}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <div onClick={ScanQRCode}>
-                    <QrCodeScannerOutlinedIcon />
-                  </div>
-                </InputAdornment>
-              ),
-            }}
-          />
-        </FormControl>
-        <FormControl fullWidth={true}>
-          <TextField
-            id="amount"
-            type="number"
-            label="Amount"
-            placeholder="0"
-            value={amount}
-            onChange={handleAmount}
-            color="primary"
-            variant="outlined"
-            error={error}
-            helperText={error && "Invalid amount."}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <p className="prefix-coin">XEC</p>
-                </InputAdornment>
-              ),
-            }}
-          />
-        </FormControl>
-      </form>
-    </ContainerSend>
+        <form className="send-form">
+          <FormControl fullWidth={true}>
+            <TextField
+              id="handleName"
+              label="Handle name (option)"
+              placeholder="Input handle name"
+              value={handleName}
+              onChange={handleInputName}
+              color="primary"
+              variant="outlined"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <div>
+                      <PersonIcon />
+                    </div>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </FormControl>
+          <FormControl fullWidth={true}>
+            <TextField
+              id="address"
+              label="Wallet address"
+              placeholder="Paste address here"
+              value={address}
+              onChange={handleAdress}
+              color="primary"
+              variant="outlined"
+              error={error}
+              helperText={error && "Incorrect address."}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <div onClick={ScanQRCode}>
+                      <QrCodeScannerOutlinedIcon />
+                    </div>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </FormControl>
+          <FormControl fullWidth={true}>
+            <TextField
+              id="amount"
+              type="number"
+              label="Amount"
+              placeholder="0"
+              value={amount}
+              onChange={handleAmount}
+              color="primary"
+              variant="outlined"
+              error={error}
+              helperText={error && "Invalid amount."}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <p className="prefix-coin">XEC</p>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </FormControl>
+        </form>
+      </ContainerSend>
+      <Dialog
+        fullWidth={true}
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClose}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>{"Use Google's location service?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            Let Google help apps determine location. This means sending
+            anonymous location data to Google, even when no apps are running.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Disagree</Button>
+          <Button onClick={handleClose}>Agree</Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }

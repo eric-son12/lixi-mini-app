@@ -7,6 +7,7 @@ import InboxOutlinedIcon from "@mui/icons-material/InboxOutlined";
 
 const Section = styled.div`
   padding: 1rem;
+  padding-bottom: 0;
   display: flex;
   justify-content: space-between;
   svg {
