@@ -14,6 +14,7 @@ import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import QrCodeScannerOutlinedIcon from "@mui/icons-material/QrCodeScannerOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { Popup, postEvent } from '@tma.js/sdk';
 
 const ContainerSend = styled.div`
   padding: 1rem;
@@ -65,11 +66,13 @@ export default function Send() {
   const [success, setSuccess] = useState<boolean>(false);
   const [address, setAddress] = useState<string>("");
   const [amount, setAmount] = useState<number>(0);
+  const [handleName, setHandleName] = useState<string>("");
   const mainButton = useMainButton();
   const backButton = useBackButton();
   const popUp = usePopup();
   const scanner = useQRScanner();
   const haptic = useHapticFeedback();
+  const popup = new Popup('6.3', postEvent);
 
   useEffect(() => {
     mainButton.show();
@@ -84,21 +87,26 @@ export default function Send() {
 
   const onMainButtonClick = () => {
     haptic.notificationOccurred("warning");
-    popUp
-      .open({
-        title: "Popup Title",
-        message: "Popup Description",
-        buttons: [
-          { id: "send-cancel", type: "cancel" },
-          { id: "send-ok", type: "ok" },
-        ],
-      })
-      .then((rs) => {
-        console.log(rs);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // popUp
+    //   .open({
+    //     title: "Popup Title",
+    //     message: "Popup Description",
+    //     buttons: [
+    //       { id: "send-cancel", type: "cancel" },
+    //       { id: "send-ok", type: "ok" },
+    //     ],
+    //   })
+    //   .then((rs) => {
+    //     console.log(rs);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+    popup.open({
+      title: 'Hello!',
+      message: 'Here is a test message.',
+      buttons: [{ id: 'my-id', type: 'default', text: 'Default text' }]
+    });
   };
 
   const ScanQRCode = () => {
@@ -124,6 +132,13 @@ export default function Send() {
     setAmount(parseInt(event.target.value));
   };
 
+  const handleInputName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setHandleName(event.target.value);
+    if (handleName === "@ericson") {
+      setAddress("ecash:qp8ks7622cklc7c9pm2d3ktwzctack6njq6q83ed9x");
+    }
+  };
+
   return (
     <ContainerSend>
       <div className="send-info">
@@ -137,6 +152,26 @@ export default function Send() {
         </p>
       </div>
       <form className="send-form">
+        <FormControl fullWidth={true}>
+          <TextField
+            id="handleName"
+            label="Handle name (option)"
+            placeholder="Input handle name"
+            value={handleName}
+            onChange={handleInputName}
+            color="primary"
+            variant="outlined"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <div onClick={ScanQRCode}>
+                    <QrCodeScannerOutlinedIcon />
+                  </div>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </FormControl>
         <FormControl fullWidth={true}>
           <TextField
             id="address"
