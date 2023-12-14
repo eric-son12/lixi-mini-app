@@ -28,7 +28,6 @@ import {
 } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
 import PersonIcon from "@mui/icons-material/Person";
-import Utils from "../utils";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
