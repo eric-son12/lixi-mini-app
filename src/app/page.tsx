@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import LixiButton from "./component/LixiButton";
 import { useInitData } from "@tma.js/sdk-react";
 import { useEffect, useMemo } from "react";
+import { atob } from "buffer";
 
 const ContainerHome = styled.div`
   display: grid;
@@ -85,27 +86,26 @@ const FunctionalBar = styled.div`
 //   );
 // };
 
-const TestLCS = () => {
-  let a = "";
-  const lcsAhihi = localStorage.getItem("test");
-  if (!lcsAhihi) {
-    localStorage.setItem("test", "ahihihi");
-  } else {
-    a = JSON.parse(lcsAhihi);
-  }
-
-  return <p>{a}</p>;
-};
-
 export default function Home() {
   const router = useRouter();
+  const initData = useInitData();
 
-  useEffect(()=> {
-    const lcsAccount = localStorage.getItem('accounts');
-    if (lcsAccount === 'true') {
-      router.push('/wallet');
+  useEffect(() => {
+    if (initData) {
+      const { startParam } = initData;
+      const objectParams = JSON.parse(atob(startParam || ''));
+      if (objectParams) {
+        router.push('send');
+      }
     }
-  },[])
+  }, [initData]);
+
+  useEffect(() => {
+    const lcsAccount = localStorage.getItem("accounts");
+    if (lcsAccount === "true") {
+      navigateWallet();
+    }
+  }, []);
 
   const navigateWallet = () => {
     router.push("/wallet");
@@ -137,10 +137,6 @@ export default function Home() {
           onClickItem={() => navigateImport()}
         />
       </FunctionalBar>
-      {/* <div style={{ maxWidth: "100%" }}>
-        <InitData />
-      </div> */}
-      {/* <TestLCS /> */}
     </ContainerHome>
   );
 }

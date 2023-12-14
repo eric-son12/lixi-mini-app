@@ -118,6 +118,11 @@ export default function Wallet() {
   const [hideBalance, setHideBalance] = useState<boolean>(false);
   const haptic = useHapticFeedback();
 
+  const handleHideBalance = () => {
+    haptic.impactOccurred('heavy');
+    setHideBalance(!hideBalance);
+  }
+
   const navigateReceive = () => {
     router.push("/receive");
   };
@@ -126,10 +131,6 @@ export default function Wallet() {
     router.push("/send");
   };
 
-  const handleHideBalance = () => {
-    haptic.impactOccurred('heavy');
-    setHideBalance(!hideBalance);
-  }
 
   return (
     <ContainerWallet>

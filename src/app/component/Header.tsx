@@ -1,9 +1,10 @@
 import React from "react";
-import styled from '@emotion/styled'
+import styled from "@emotion/styled";
 import BackupOutlinedIcon from "@mui/icons-material/BackupOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
 import InboxOutlinedIcon from "@mui/icons-material/InboxOutlined";
+import { useRouter } from "next/navigation";
 
 const Section = styled.div`
   padding: 1rem;
@@ -21,12 +22,18 @@ type HeaderProps = {
 };
 
 function Header(props: HeaderProps) {
+  const router = useRouter();
+
+  const navigateSetting = () => {
+    router.push("/setting");
+  };
+
   return (
     <Section>
-      <div>
-        {/* <InboxOutlinedIcon /> */}
+      <div>{/* <InboxOutlinedIcon /> */}</div>
+      <div onClick={navigateSetting}>
+        <SettingsOutlinedIcon />
       </div>
-      <SettingsOutlinedIcon />
     </Section>
   );
 }

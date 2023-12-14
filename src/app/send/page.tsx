@@ -14,6 +14,7 @@ import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import QrCodeScannerOutlinedIcon from "@mui/icons-material/QrCodeScannerOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import {
   Button,
   Dialog,
@@ -22,9 +23,12 @@ import {
   DialogContentText,
   DialogTitle,
   Slide,
+  Snackbar,
+  Stack,
 } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
 import PersonIcon from "@mui/icons-material/Person";
+import Utils from "../utils";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -100,6 +104,7 @@ export default function Send() {
 
   const handleClose = () => {
     setOpen(false);
+    setSuccess(false);
   };
 
   useEffect(() => {
@@ -117,8 +122,8 @@ export default function Send() {
     haptic.notificationOccurred("warning");
     popUp
       .open({
-        title: "Popup Title",
-        message: "Popup Description",
+        title: "Warning",
+        message: "Please double check ipput",
         buttons: [
           { id: "send-cancel", type: "cancel" },
           { id: "send-ok", type: "ok" },
@@ -133,6 +138,12 @@ export default function Send() {
     console.log("Main button clicked!");
   };
 
+  const onBackButtonClick = () => {
+    router.back();
+    backButton.hide();
+    mainButton.hide();
+  };
+
   const ScanQRCode = () => {
     haptic.notificationOccurred("warning");
     scanner.open("Scan the barcode").then((content) => {
@@ -140,12 +151,6 @@ export default function Send() {
       setAddress(content || "null");
       scanner.close();
     });
-  };
-
-  const onBackButtonClick = () => {
-    router.back();
-    backButton.hide();
-    mainButton.hide();
   };
 
   const handleAdress = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -158,9 +163,13 @@ export default function Send() {
 
   const handleInputName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setHandleName(event.target.value);
-    if (handleName === "@ericson") {
+    if (event.target.value == "@ericson") {
       setAddress("ecash:qp8ks7622cklc7c9pm2d3ktwzctack6njq6q83ed9x");
     }
+  };
+
+  const handleOnCopy = () => {
+    setSuccess(true);
   };
 
   return (
@@ -170,7 +179,7 @@ export default function Send() {
           <img width={96} height={96} src="/send.svg" alt="" />
           <div className="header-send">
             <h2 className="title">Send</h2>
-            <div onClick={handleClickOpen}>
+            <div>
               <InfoOutlinedIcon />
             </div>
           </div>
@@ -186,13 +195,15 @@ export default function Send() {
               placeholder="Input handle name"
               value={handleName}
               onChange={handleInputName}
-              color="primary"
+              color="info"
               variant="outlined"
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
                     <div>
-                      <PersonIcon />
+                      <CopyToClipboard text={"12345667"} onCopy={handleOnCopy}>
+                        <PersonIcon />
+                      </CopyToClipboard>
                     </div>
                   </InputAdornment>
                 ),
@@ -205,8 +216,8 @@ export default function Send() {
               label="Wallet address"
               placeholder="Paste address here"
               value={address}
+              color="info"
               onChange={handleAdress}
-              color="primary"
               variant="outlined"
               error={error}
               helperText={error && "Incorrect address."}
@@ -228,10 +239,10 @@ export default function Send() {
               label="Amount"
               placeholder="0"
               value={amount}
+              color="info"
               onChange={handleAmount}
-              color="primary"
               variant="outlined"
-              error={error}
+              error={typeof amount != "number"}
               helperText={error && "Invalid amount."}
               InputProps={{
                 endAdornment: (
@@ -244,8 +255,8 @@ export default function Send() {
           </FormControl>
         </form>
       </ContainerSend>
+      {/* <ToastComponent1 message="ahihihi" /> */}
       <Dialog
-        fullWidth={true}
         open={open}
         TransitionComponent={Transition}
         keepMounted
@@ -264,6 +275,15 @@ export default function Send() {
           <Button onClick={handleClose}>Agree</Button>
         </DialogActions>
       </Dialog>
+      <Stack>
+        <Snackbar
+          open={success}
+          onClose={handleClose}
+          autoHideDuration={2000}
+          message={"ahihi"}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        />
+      </Stack>
     </>
   );
 }
