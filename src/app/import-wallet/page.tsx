@@ -11,6 +11,7 @@ import {
   IconButton,
   InputAdornment,
   Snackbar,
+  Stack,
   TextField,
   Tooltip,
 } from "@mui/material";
@@ -80,7 +81,7 @@ export default function ImportWallet() {
   const popUp = usePopup();
 
   useEffect(() => {
-    mainButton.show();
+    mainButton.enable().show();
     mainButton.setText("Import");
     mainButton.on("click", onMainButtonClick);
     backButton.on("click", onBackButtonClick);
@@ -88,13 +89,7 @@ export default function ImportWallet() {
   }, []);
 
   const onMainButtonClick = () => {
-    popUp.open({
-      title: 'Popup Title',
-      message: 'Popup Description',
-      buttons: [
-        <Button title="Ok"/>
-      ]
-    })
+    importWallet;
   };
 
   const onBackButtonClick = () => {
@@ -122,7 +117,7 @@ export default function ImportWallet() {
     if (result) {
       setError(false);
       setSuccess(true);
-      localStorage.setItem('accounts', 'true');
+      localStorage.setItem("accounts", "true");
       setTimeout(() => {
         router.push("/wallet");
         mainButton.hide();
@@ -188,14 +183,16 @@ export default function ImportWallet() {
           Import wallet success — Check it out!
         </Alert> */}
       </Backdrop>
-      <Snackbar
-        open={success}
-        autoHideDuration={2000}
-        onClose={handleClose}
-        message="Import wallet success — Check it out!"
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      />
-      <Button onClick={importWallet}>Import</Button>
+      <Stack>
+        <Snackbar
+          open={success}
+          autoHideDuration={2000}
+          onClose={handleClose}
+          message="Import wallet success — Check it out!"
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        />
+      </Stack>
+      {/* <Button onClick={importWallet}>Import</Button> */}
     </ContainerImportWallet>
   );
 }

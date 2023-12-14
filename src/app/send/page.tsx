@@ -75,7 +75,7 @@ export default function Send() {
   const popup = new Popup('6.3', postEvent);
 
   useEffect(() => {
-    mainButton.show();
+    mainButton.enable().show();
     mainButton.setText("Send");
     backButton.show();
   }, []);

@@ -155,7 +155,7 @@ export default function Receive() {
 
   useEffect(() => {
     backButton.show();
-    mainButton.show();
+    mainButton.enable().show();
     mainButton.setText("Share this");
   }, []);
 

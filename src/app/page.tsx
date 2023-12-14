@@ -101,7 +101,7 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(()=> {
-    const lcsAccount = localStorage.getItem('account');
+    const lcsAccount = localStorage.getItem('accounts');
     if (lcsAccount === 'true') {
       router.push('/wallet');
     }
