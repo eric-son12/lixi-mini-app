@@ -102,6 +102,7 @@ export default function Send() {
     //   .catch((err) => {
     //     console.log(err);
     //   });
+    console.log('Main button clicked!');
     popup.open({
       title: 'Hello!',
       message: 'Here is a test message.',

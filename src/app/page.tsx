@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import styled from "@emotion/styled";
 import LixiButton from "./component/LixiButton";
 import { useInitData } from "@tma.js/sdk-react";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 const ContainerHome = styled.div`
   display: grid;
@@ -15,7 +15,7 @@ const ContainerHome = styled.div`
 
 const FeatureEducation = styled.div`
   img {
-    max-width: 100%;
+    max-width: 70%;
   }
   .feature-title {
     font-weight: 600;
@@ -99,6 +99,13 @@ const TestLCS = () => {
 
 export default function Home() {
   const router = useRouter();
+
+  useEffect(()=> {
+    const lcsAccount = localStorage.getItem('account');
+    if (lcsAccount === 'true') {
+      router.push('/wallet');
+    }
+  },[])
 
   const navigateWallet = () => {
     router.push("/wallet");

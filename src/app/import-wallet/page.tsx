@@ -122,6 +122,7 @@ export default function ImportWallet() {
     if (result) {
       setError(false);
       setSuccess(true);
+      localStorage.setItem('accounts', 'true');
       setTimeout(() => {
         router.push("/wallet");
         mainButton.hide();
