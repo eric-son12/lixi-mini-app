@@ -4,7 +4,6 @@ import styled from "@emotion/styled";
 import LixiButton from "./component/LixiButton";
 import { useInitData } from "@tma.js/sdk-react";
 import { useEffect, useMemo } from "react";
-import { atob } from "buffer";
 
 const ContainerHome = styled.div`
   display: grid;
