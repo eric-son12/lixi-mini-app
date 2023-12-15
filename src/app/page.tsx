@@ -88,17 +88,17 @@ const FunctionalBar = styled.div`
 
 export default function Home() {
   const router = useRouter();
-  const initData = useInitData();
+  // const initData = useInitData();
 
-  useEffect(() => {
-    if (initData) {
-      const { startParam } = initData;
-      const objectParams = JSON.parse(atob(startParam || ''));
-      if (objectParams) {
-        router.push('send');
-      }
-    }
-  }, [initData]);
+  // useEffect(() => {
+  //   if (initData) {
+  //     const { startParam } = initData;
+  //     const objectParams = JSON.parse(atob(startParam || ''));
+  //     if (objectParams) {
+  //       router.push('send');
+  //     }
+  //   }
+  // }, [initData]);
 
   useEffect(() => {
     const lcsAccount = localStorage.getItem("accounts");

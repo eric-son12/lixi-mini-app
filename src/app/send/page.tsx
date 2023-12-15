@@ -254,7 +254,6 @@ export default function Send() {
           </FormControl>
         </form>
       </ContainerSend>
-      {/* <ToastComponent1 message="ahihihi" /> */}
       <Dialog
         open={open}
         TransitionComponent={Transition}
