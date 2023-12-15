@@ -189,9 +189,9 @@ export default function Send() {
         <form className="send-form">
           <FormControl fullWidth={true}>
             <TextField
-              id="handleName"
-              label="Handle name (option)"
-              placeholder="Input handle name"
+              id="username"
+              label="Username (option)"
+              placeholder="Input username"
               value={handleName}
               onChange={handleInputName}
               color="info"

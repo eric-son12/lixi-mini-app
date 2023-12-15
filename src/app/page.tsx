@@ -123,6 +123,7 @@ export default function Home() {
   }, [initData]);
 
   useEffect(() => {
+    localStorage.setItem('initDATA', initDataJson);
     console.log("DATAJSON", initDataJson);
     // const { startParam } = initData;
     //     const objectParams = JSON.parse(atob(startParam || ''));
