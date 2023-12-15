@@ -125,14 +125,18 @@ export default function Home() {
   useEffect(() => {
     if (initData) {
       let startParams = initData?.startParam || "";
-      localStorage.setItem("initDATA", JSON.stringify(initData));
-      localStorage.setItem("startParams", startParams);
-      const objStartParams = JSON.parse(atob(startParams));
-      if (objStartParams) {
-        router.push(`/send/?handleName=${objStartParams?.handleName}&address=${objStartParams?.address}&amount=${objStartParams?.amount}`);
+      if (startParams) {
+        localStorage.setItem("initDATA", JSON.stringify(initData));
+        localStorage.setItem("startParams", startParams);
+        const objStartParams = JSON.parse(atob(startParams));
+        if (objStartParams) {
+          router.push(`/send/?handleName=${objStartParams?.handleName}&address=${objStartParams?.address}&amount=${objStartParams?.amount}`);
+        }
       }
+    } else {
+      return;
     }
-  }, [initData]);
+  }, []);
 
   // useEffect(() => {
   //   let data = {
