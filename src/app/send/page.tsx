@@ -7,7 +7,7 @@ import {
   useQRScanner,
   useHapticFeedback,
 } from "@tma.js/sdk-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import styled from "@emotion/styled";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
@@ -83,28 +83,35 @@ const ContainerSend = styled.div`
 
 export default function Send() {
   const router = useRouter();
+  const params = useSearchParams();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
   const [address, setAddress] = useState<string>("");
   const [amount, setAmount] = useState<number>(0);
   const [handleName, setHandleName] = useState<string>("");
+  const [open, setOpen] = React.useState(false);
+
+  useEffect(() => {
+    handleParamsConfirm();
+  },[params])
+
+  const handleParamsConfirm = () => {
+    const handleNameParams = params.get('handleName');
+    const addressParams = params.get('address');
+    const amountParams = params.get('amount');
+    if (handleNameParams && addressParams && amountParams) {
+      setHandleName(handleNameParams);
+      setAddress(addressParams);
+      setAmount(parseInt(amountParams));
+      mainButton.setText("Confirm");
+    }
+  }
   const mainButton = useMainButton();
   const backButton = useBackButton();
   const popUp = usePopup();
   const scanner = useQRScanner();
   const haptic = useHapticFeedback();
-
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    setSuccess(false);
-  };
 
   useEffect(() => {
     mainButton.enable().show();
@@ -152,6 +159,16 @@ export default function Send() {
     });
   };
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setSuccess(false);
+  };
+
+
   const handleAdress = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAddress(event.target.value);
   };
@@ -183,7 +200,7 @@ export default function Send() {
             </div>
           </div>
           <p className="subtitle">
-            <span>Available:</span> 1,000 XEC
+            <span>Available:</span> 14,624 XEC
           </p>
         </div>
         <form className="send-form">

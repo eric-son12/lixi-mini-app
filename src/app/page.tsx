@@ -91,46 +91,61 @@ export default function Home() {
 
   const initData = useInitData();
 
-  const initDataJson = useMemo(() => {
-    if (!initData) {
-      return "Init data is empty.";
-    }
-    const {
-      authDate,
-      chat,
-      hash,
-      canSendAfter,
-      queryId,
-      receiver,
-      user,
-      startParam,
-    } = initData;
+  // const initDataJson = useMemo(() => {
+  //   if (!initData) {
+  //     return "Init data is empty.";
+  //   }
+  //   const {
+  //     authDate,
+  //     chat,
+  //     hash,
+  //     canSendAfter,
+  //     queryId,
+  //     receiver,
+  //     user,
+  //     startParam,
+  //   } = initData;
 
-    return JSON.stringify(
-      {
-        authDate,
-        chat,
-        hash,
-        canSendAfter,
-        queryId,
-        receiver,
-        user,
-        startParam,
-      },
-      null,
-      " "
-    );
-  }, [initData]);
+  //   return JSON.stringify(
+  //     {
+  //       authDate,
+  //       chat,
+  //       hash,
+  //       canSendAfter,
+  //       queryId,
+  //       receiver,
+  //       user,
+  //       startParam,
+  //     },
+  //     null,
+  //     " "
+  //   );
+  //   return initData;
+  // }, [initData]);
 
   useEffect(() => {
-    localStorage.setItem('initDATA', initDataJson);
-    console.log("DATAJSON", initDataJson);
-    // const { startParam } = initData;
-    //     const objectParams = JSON.parse(atob(startParam || ''));
-    //     if (objectParams) {
-    //       router.push('send');
-    //     }
-  }, [initDataJson]);
+    let startParams = initData?.startParam || "";
+    localStorage.setItem("initDATA", JSON.stringify(initData));
+    localStorage.setItem("startParams", startParams);
+    const objStartParams = JSON.parse(atob(startParams));
+    if (objStartParams) {
+      let data = {
+        handleName: objStartParams?.handleName,
+        address: objStartParams?.address,
+        amount: objStartParams?.amount,
+      };
+      router.push(`/send/?handleName=${data.handleName}&address=${data.address}&amount=${data.amount}`);
+    }
+  }, [initData]);
+
+  // useEffect(() => {
+  //   let data = {
+  //     handleName: '@ericson',
+  //     address: '1243',
+  //     amount: '50000',
+  //   };
+  //   router.push(`/send/?handleName=${data.handleName}&address=${data.address}&amount=${data.amount}`);
+  // },[])
 
   useEffect(() => {
     const lcsAccount = localStorage.getItem("accounts");
