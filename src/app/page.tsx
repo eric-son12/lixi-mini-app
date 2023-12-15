@@ -45,7 +45,7 @@ const FunctionalBar = styled.div`
 /**
  * Displays current application init data.
  */
-// const InitData = () => {
+// const InitDataSDK = () => {
 //   const initData = useInitData();
 
 //   const initDataJson = useMemo(() => {
@@ -88,17 +88,48 @@ const FunctionalBar = styled.div`
 
 export default function Home() {
   const router = useRouter();
-  // const initData = useInitData();
 
-  // useEffect(() => {
-  //   if (initData) {
-  //     const { startParam } = initData;
-  //     const objectParams = JSON.parse(atob(startParam || ''));
-  //     if (objectParams) {
-  //       router.push('send');
-  //     }
-  //   }
-  // }, [initData]);
+  const initData = useInitData();
+
+  const initDataJson = useMemo(() => {
+    if (!initData) {
+      return "Init data is empty.";
+    }
+    const {
+      authDate,
+      chat,
+      hash,
+      canSendAfter,
+      queryId,
+      receiver,
+      user,
+      startParam,
+    } = initData;
+
+    return JSON.stringify(
+      {
+        authDate,
+        chat,
+        hash,
+        canSendAfter,
+        queryId,
+        receiver,
+        user,
+        startParam,
+      },
+      null,
+      " "
+    );
+  }, [initData]);
+
+  useEffect(() => {
+    console.log("DATAJSON", initDataJson);
+    // const { startParam } = initData;
+    //     const objectParams = JSON.parse(atob(startParam || ''));
+    //     if (objectParams) {
+    //       router.push('send');
+    //     }
+  }, [initDataJson]);
 
   useEffect(() => {
     const lcsAccount = localStorage.getItem("accounts");
@@ -118,7 +149,9 @@ export default function Home() {
     <ContainerHome>
       <FeatureEducation>
         <img className="feature-banner" src="/lixi-credit.svg" alt="" />
-        <h3 className="feature-title">Control your money without an account</h3>
+        <h3 className="feature-title">
+          Send crypto currencies to anyone on Telegram.
+        </h3>
         <p className="feature-subtitle">
           Lixi app allows you to privately store, manage, and use your crypto
           funds without having to trust a centralized bank or exchange
