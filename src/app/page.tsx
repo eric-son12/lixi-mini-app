@@ -129,12 +129,7 @@ export default function Home() {
     localStorage.setItem("startParams", startParams);
     const objStartParams = JSON.parse(atob(startParams));
     if (objStartParams) {
-      let data = {
-        handleName: objStartParams?.handleName,
-        address: objStartParams?.address,
-        amount: objStartParams?.amount,
-      };
-      router.push(`/send/?handleName=${data.handleName}&address=${data.address}&amount=${data.amount}`);
+      router.push(`/send/?handleName=${objStartParams?.handleName}&address=${objStartParams?.address}&amount=${objStartParams?.amount}`);
     }
   }, [initData]);
 
