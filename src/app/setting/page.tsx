@@ -181,7 +181,7 @@ export default function Setting() {
             <AccordionDetails>
               <LixiButton
                 title="Delete"
-                onClickItem={() => router.push("/import-wallet")}
+                onClickItem={handleDeleteAccount}
               />
             </AccordionDetails>
           </Accordion>
