@@ -85,6 +85,7 @@ export default function Send() {
   const router = useRouter();
   const params = useSearchParams();
   const [loading, setLoading] = useState<boolean>(false);
+  const [isConfirm, setIsConfirm] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
   const [address, setAddress] = useState<string>("");
@@ -94,19 +95,21 @@ export default function Send() {
 
   useEffect(() => {
     handleParamsConfirm();
-  },[params])
+  }, [params]);
 
   const handleParamsConfirm = () => {
-    const handleNameParams = params.get('handleName');
-    const addressParams = params.get('address');
-    const amountParams = params.get('amount');
+    const handleNameParams = params.get("handleName");
+    const addressParams = params.get("address");
+    const amountParams = params.get("amount");
     if (handleNameParams && addressParams && amountParams) {
+      setIsConfirm(true);
       setHandleName(handleNameParams);
       setAddress(addressParams);
       setAmount(parseInt(amountParams));
-      mainButton.setText("Confirm");
+    } else {
+      setIsConfirm(false);
     }
-  }
+  };
   const mainButton = useMainButton();
   const backButton = useBackButton();
   const popUp = usePopup();
@@ -115,13 +118,14 @@ export default function Send() {
 
   useEffect(() => {
     mainButton.enable().show();
-    mainButton.setText("Send");
     backButton.show();
   }, []);
 
   useEffect(() => {
     mainButton.on("click", onMainButtonClick);
     backButton.on("click", onBackButtonClick);
+    isConfirm ? mainButton.setText("Confirm") : mainButton.setText("Send");
+    isConfirm ? backButton.hide() : backButton.show();
   }, [mainButton, backButton]);
 
   const onMainButtonClick = () => {
@@ -167,7 +171,6 @@ export default function Send() {
     setOpen(false);
     setSuccess(false);
   };
-
 
   const handleAdress = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAddress(event.target.value);
