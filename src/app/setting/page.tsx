@@ -20,8 +20,10 @@ import {
   AccordionDetails,
   AccordionSummary,
   Alert,
+  Button,
 } from "@mui/material";
 import { CheckCircleOutline } from "@mui/icons-material";
+import LixiButton from "../component/LixiButton";
 
 const ContainerSetting = styled.div`
   padding: 1rem;
@@ -50,87 +52,97 @@ const ContainerSetting = styled.div`
   }
   .setting-content {
     padding: 1rem 0;
+    .setting-item {
+      margin-bottom: 1rem;
+      .title {
+        padding: 1rem;
+        font-size: 16px;
+        font-weight: 400;
+        color: #edeff099;
+      }
+      .ico-alert {
+        align-self: center !important;
+      }
+    }
+    .seed-phrase {
+      text-align: center;
+      letter-spacing: 0.4px;
+      color: var(--color-primary);
+    }
+    button {
+      width: 100%;
+    }
+  }
+  .collapse-backup-seed {
+    margin: 0 !important;
   }
 `;
 
 export default function Setting() {
   const router = useRouter();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
-  const [success, setSuccess] = useState<boolean>(false);
-  const [address, setAddress] = useState<string>("");
-  const [amount, setAmount] = useState<number>(0);
-  const [handleName, setHandleName] = useState<string>("");
 
-  // const mainButton = useMainButton();
-  // const backButton = useBackButton();
-  // const popUp = usePopup();
-  // const scanner = useQRScanner();
-  // const haptic = useHapticFeedback();
+  const mainButton = useMainButton();
+  const backButton = useBackButton();
+  const popUp = usePopup();
+  const haptic = useHapticFeedback();
 
-  // useEffect(() => {
-  //   mainButton.enable().show();
-  //   mainButton.setText("Send");
-  //   backButton.show();
-  // }, []);
+  useEffect(() => {
+    backButton.show();
+  }, []);
 
-  // useEffect(() => {
-  //   mainButton.on("click", onMainButtonClick);
-  //   backButton.on("click", onBackButtonClick);
-  // }, [mainButton, backButton]);
+  useEffect(() => {
+    backButton.on("click", onBackButtonClick);
+  }, [backButton]);
 
-  // const onMainButtonClick = () => {
-  //   haptic.notificationOccurred("warning");
-  //   popUp
-  //     .open({
-  //       title: "Popup Title",
-  //       message: "Popup Description",
-  //       buttons: [
-  //         { id: "send-cancel", type: "cancel" },
-  //         { id: "send-ok", type: "ok" },
-  //       ],
-  //     })
-  //     .then((rs) => {
-  //       console.log(rs);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
+  const onBackButtonClick = () => {
+    router.back();
+    backButton.hide();
+    mainButton.hide();
+  };
 
-  // const ScanQRCode = () => {
-  //   haptic.notificationOccurred("warning");
-  //   scanner.open("Scan the barcode").then((content) => {
-  //     console.log(content);
-  //     setAddress(content || "null");
-  //     scanner.close();
-  //   });
-  // };
+  const handleDeleteAccount = () => {
+    haptic.notificationOccurred("warning");
+    popUp
+      .open({
+        title: "DELETE ACCOUNT",
+        message: "Please backup your seed before delete account to avoid lost your account!",
+        buttons: [
+          { id: "delete-cancel", type: "cancel" },
+          { id: "delete-ok", type: "ok" },
+        ],
+      })
+      .then((rs) => {
+        // if (rs === 'delete-ok') {
 
-  // const onBackButtonClick = () => {
-  //   router.back();
-  //   backButton.hide();
-  //   mainButton.hide();
-  // };
+        // }
+        console.log(rs);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <ContainerSetting>
       <div className="setting-info">
-        <img width={96} height={96} src="/send.svg" alt="" />
+        <img width={96} height={96} src="/setting.svg" alt="" />
         <div className="header-setting">
           <h2 className="title">Setting</h2>
         </div>
       </div>
       <div className="setting-content">
-        <div className="backup-seed-phrase">
+        <div className="setting-item">
+          <p className="title">Backup seed phrase</p>
           <Alert
-            icon={<CheckCircleOutline fontSize="inherit" />}
+            icon={
+              <CheckCircleOutline className="ico-alert" fontSize="inherit" />
+            }
             severity="warning"
           >
             Your seed phrase is the only way to restore your account. Write it
             down. Keep it safe.
           </Alert>
-          <Accordion>
+          <Accordion className="collapse-backup-seed">
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
@@ -139,10 +151,67 @@ export default function Setting() {
               <p>Click to reveal seed phrase</p>
             </AccordionSummary>
             <AccordionDetails>
-              <p>
+              <p className="seed-phrase">
                 firm panther globe worry affair solve monitor reason carpet
                 yellow return labor
               </p>
+            </AccordionDetails>
+          </Accordion>
+        </div>
+
+        <div className="setting-item">
+          <p className="title">Delete account</p>
+          <Alert
+            icon={
+              <CheckCircleOutline className="ico-alert" fontSize="inherit" />
+            }
+            severity="error"
+          >
+            Delete your account in platform. You can import it later by seed
+            phrase have been stored.
+          </Alert>
+          <Accordion className="collapse-backup-seed">
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <p>Click to delete account</p>
+            </AccordionSummary>
+            <AccordionDetails>
+              <LixiButton
+                title="Delete"
+                onClickItem={() => router.push("/import-wallet")}
+              />
+            </AccordionDetails>
+          </Accordion>
+        </div>
+
+        <div className="setting-item">
+          <p className="title">Import account</p>
+          <Alert
+            icon={
+              <CheckCircleOutline className="ico-alert" fontSize="inherit" />
+            }
+            severity="info"
+          >
+            Enter your recovery phrase (12 words) in the correct order. Separate
+            each word with a single space only (no commas or any other
+            punctuation).
+          </Alert>
+          <Accordion className="collapse-backup-seed">
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <p>Click to import account</p>
+            </AccordionSummary>
+            <AccordionDetails>
+              <LixiButton
+                title="Import account"
+                onClickItem={() => router.push("/import-wallet")}
+              />
             </AccordionDetails>
           </Accordion>
         </div>
