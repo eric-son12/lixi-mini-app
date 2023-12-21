@@ -4,7 +4,6 @@ import styled from "@emotion/styled";
 import LixiButton from "./component/LixiButton";
 import { useInitData } from "@tma.js/sdk-react";
 import { useEffect, useMemo } from "react";
-import StoreProvider from "./StoreProvider";
 
 const ContainerHome = styled.div`
   display: grid;
@@ -163,7 +162,6 @@ export default function Home() {
     router.push("/import-wallet");
   };
   return (
-    <StoreProvider>
       <ContainerHome>
         <FeatureEducation>
           <img className="feature-banner" src="/lixi-credit.svg" alt="" />
@@ -189,6 +187,5 @@ export default function Home() {
           />
         </FunctionalBar>
       </ContainerHome>
-    </StoreProvider>
   );
 }
