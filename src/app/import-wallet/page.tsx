@@ -85,8 +85,8 @@ export default function ImportWallet() {
   useEffect(() => {
     mainButton.enable().show();
     mainButton.setText("Import");
-    mainButton.on("click", onMainButtonClick);
-    backButton.on("click", onBackButtonClick);
+    mainButton.on("click", onMainButtonClick());
+    backButton.on("click", onBackButtonClick());
     backButton.show();
   }, []);
 
