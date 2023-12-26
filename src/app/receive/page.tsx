@@ -10,7 +10,7 @@ import {
 } from "@tma.js/sdk-react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { shareOnMobile } from "react-mobile-share";
-import { TextField } from "@mui/material";
+import { Snackbar, Stack, TextField } from "@mui/material";
 import styled from "@emotion/styled";
 import QRCodeStyling, {
   Options as QRCodeStylingOptions,
@@ -140,6 +140,7 @@ const useQRCodeStyling = (
 
 export default function Receive() {
   const router = useRouter();
+  const [isShowCopy, setIsShowCopy] = useState<boolean>(false);
   const addressAcount = "qp8ks7622cklc7c9pm2d3ktwzctack6njq6q83ed9x";
   const [request, setRequest] = useState<string>(
     "qp8ks7622cklc7c9pm2d3ktwzctack6njq6q83ed9x"
@@ -160,22 +161,15 @@ export default function Receive() {
   }, []);
 
   useEffect(() => {
-    mainButton.on("click", onMainButtonClick);
-    backButton.on("click", onBackButtonClick);
+    mainButton.on("click", onMainButtonClick());
+    backButton.on("click", onBackButtonClick());
   }, [mainButton, backButton]);
 
   const onMainButtonClick = () => {
-    // popUp.open({
-    //   title: "Receive info",
-    //   message:
-    //     "You can copy and share your wallet address by clicking on the address. You can also share your wallet QRCode.",
-    //   buttons: [{ id: "receive-ok", type: "ok" }],
-    // });
-    // popUp.isOpened;
-    // haptic.impactOccurred("medium");
+    haptic.impactOccurred("medium");
     shareOnMobile({
-      // text: "Hey checkout our package react-mobile-share",
-      // url: "https://www.npmjs.com/package/react-mobile-share",
+      text: shareMobile,
+      url: "https://www.npmjs.com/package/react-mobile-share",
       title: shareMobile,
     });
   };
@@ -188,6 +182,11 @@ export default function Receive() {
 
   const copyTextToClipboard = () => {
     haptic.impactOccurred("medium");
+    setIsShowCopy(true);
+  };
+
+  const handleClose = () => {
+    setIsShowCopy(false);
   };
 
   useEffect(() => {
@@ -221,62 +220,69 @@ export default function Receive() {
     debounceAmount(value);
   };
 
-  const TooltipReceive = () => {
-    return (
-      <React.Fragment>
-        <TooltipContainer>
-          <InfoOutlinedIcon />
-          <p>
-            You can copy and share your wallet address by clicking on the
-            address. You can also share your wallet QRCode.
-          </p>
-        </TooltipContainer>
-      </React.Fragment>
-    );
+  const infoReceive = () => {
+    popUp.open({
+      title: "Receive info",
+      message:
+        "You can copy and share your wallet address by clicking on the address. You can also share your wallet QRCode.",
+      buttons: [{ id: "receive-ok", type: "ok" }],
+    });
+    popUp.isOpened;
   };
 
   return (
-    <ContainerReceive>
-      <div className="receive-info">
-        <img width={96} height={96} src="/request.svg" alt="" />
-        <div className="header-receive">
-          <h2 className="title">Receive</h2>
-          <InfoOutlinedIcon />
+    <>
+      <ContainerReceive>
+        <div className="receive-info">
+          <img width={96} height={96} src="/request.svg" alt="" />
+          <div className="header-receive">
+            <h2 className="title">Receive</h2>
+            <div onClick={infoReceive}>
+            <InfoOutlinedIcon />
+            </div>
+          </div>
         </div>
-      </div>
-      <div className="receive-form">
-        <FormControl fullWidth={true}>
-          <TextField
-            id="address"
-            label="Request amount (option)"
-            placeholder="0"
-            color="primary"
-            variant="outlined"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <p className="prefix-coin">XEC</p>
-                </InputAdornment>
-              ),
-            }}
-            onChange={onRequestChange}
-          />
-        </FormControl>
-      </div>
-      <div className="coin-address">
-        <div style={{ textAlign: "center" }} ref={ref}></div>
-        <div className="address-string">
-          <ContentPasteIcon />
-          <span>
-            <CopyToClipboard text={request} onCopy={copyTextToClipboard}>
-              <>
-              <span style={{ color: "#01abe8" }}>ecash:</span>
-              {request}
-              </>
-            </CopyToClipboard>
-          </span>
+        <div className="receive-form">
+          <FormControl fullWidth={true}>
+            <TextField
+              id="address"
+              label="Request amount (option)"
+              placeholder="0"
+              color="primary"
+              variant="outlined"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <p className="prefix-coin">XEC</p>
+                  </InputAdornment>
+                ),
+              }}
+              onChange={onRequestChange}
+            />
+          </FormControl>
         </div>
-      </div>
-    </ContainerReceive>
+        <div className="coin-address">
+          <div style={{ textAlign: "center" }} ref={ref}></div>
+          <CopyToClipboard text={request} onCopy={copyTextToClipboard}>
+            <div className="address-string">
+              <ContentPasteIcon />
+              <span>
+                <span style={{ color: "#01abe8" }}>ecash:</span>
+                {request}
+              </span>
+            </div>
+          </CopyToClipboard>
+        </div>
+      </ContainerReceive>
+      <Stack>
+        <Snackbar
+          open={isShowCopy}
+          onClose={handleClose}
+          autoHideDuration={2000}
+          message={"The address has been copied."}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        />
+      </Stack>
+    </>
   );
 }

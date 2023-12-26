@@ -233,14 +233,14 @@ export default function Wallet() {
                 <p style={{color: '#ffb4a9'}} className="amount">-2453.09 XEC</p>
                 <p className="username">From: Nghiacc <img width={12} height={12} src="/telegram-ico.svg" alt="telegram icon" /></p>
               </div>
-              <div className="date-time">26/12/2023</div>
+              <div className="date-time">24/12/2023</div>
             </div>
             <div className="item">
               <div className="tx-history">
                 <p className="amount">+6805.82 XEC</p>
                 <p className="username">From: Vince <img width={12} height={12} src="/telegram-ico.svg" alt="telegram icon" /></p>
               </div>
-              <div className="date-time">26/12/2023</div>
+              <div className="date-time">19/12/2023</div>
             </div>
             {/* <div className="ghost-town">
               <img src="/ghost.svg" alt="" />

@@ -15,7 +15,7 @@ import {
   TextField,
   Tooltip,
 } from "@mui/material";
-import { useBackButton, useMainButton, usePopup } from "@tma.js/sdk-react";
+import { useBackButton, useHapticFeedback, useMainButton, usePopup, useQRScanner } from "@tma.js/sdk-react";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import QrCodeScannerOutlinedIcon from "@mui/icons-material/QrCodeScannerOutlined";
 import { CheckCircleOutline } from "@mui/icons-material";
@@ -79,6 +79,8 @@ export default function ImportWallet() {
   const mainButton = useMainButton();
   const backButton = useBackButton();
   const popUp = usePopup();
+  const scanner = useQRScanner();
+  const haptic = useHapticFeedback();
 
   useEffect(() => {
     mainButton.enable().show();
@@ -89,13 +91,21 @@ export default function ImportWallet() {
   }, []);
 
   const onMainButtonClick = () => {
-    importWallet;
+    importWallet();
   };
 
   const onBackButtonClick = () => {
     router.back();
     backButton.hide();
     mainButton.hide();
+  };
+
+  const scanQRCode = () => {
+    haptic.notificationOccurred("warning");
+    scanner.open("Scan the seed phrase").then((content) => {
+      setSeedPhrase(content || "null");
+      scanner.close();
+    });
   };
 
   const handleSeedPhrase = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -156,7 +166,9 @@ export default function ImportWallet() {
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
+                  <div onClick={scanQRCode}>
                   <QrCodeScannerOutlinedIcon />
+                  </div>
                 </InputAdornment>
               ),
             }}
