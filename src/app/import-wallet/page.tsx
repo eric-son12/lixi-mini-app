@@ -103,7 +103,7 @@ export default function ImportWallet() {
   const scanQRCode = () => {
     haptic.notificationOccurred("warning");
     scanner.open("Scan the seed phrase").then((content) => {
-      setSeedPhrase(content || "null");
+      setSeedPhrase(content || "");
       scanner.close();
     });
   };

@@ -145,7 +145,7 @@ export default function Receive() {
   const [request, setRequest] = useState<string>(
     "qp8ks7622cklc7c9pm2d3ktwzctack6njq6q83ed9x"
   );
-  const [shareMobile, setShareMobile] = useState<string>("");
+  const [shareMobile, setShareMobile] = useState<string>(`https://lixi-mini-app.vercel.app/startapp=${request}`);
   const qrCode = useQRCodeStyling(qrOptions);
   const ref = useRef<any>(null);
 
@@ -167,11 +167,14 @@ export default function Receive() {
 
   const onMainButtonClick = () => {
     haptic.impactOccurred("medium");
-    shareOnMobile({
-      text: shareMobile,
-      url: "https://www.npmjs.com/package/react-mobile-share",
-      title: shareMobile,
-    });
+    shareOnMobile(
+      {
+        text: shareMobile,
+        url: "https://www.npmjs.com/package/react-mobile-share",
+        title: shareMobile,
+      },
+      (message) => alert(message)
+    );
   };
 
   const onBackButtonClick = () => {
@@ -238,7 +241,7 @@ export default function Receive() {
           <div className="header-receive">
             <h2 className="title">Receive</h2>
             <div onClick={infoReceive}>
-            <InfoOutlinedIcon />
+              <InfoOutlinedIcon />
             </div>
           </div>
         </div>
