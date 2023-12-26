@@ -9,18 +9,12 @@ import {
 } from "@tma.js/sdk-react";
 import { useRouter } from "next/navigation";
 import styled from "@emotion/styled";
-import FormControl from "@mui/material/FormControl";
-import TextField from "@mui/material/TextField";
-import InputAdornment from "@mui/material/InputAdornment";
-import QrCodeScannerOutlinedIcon from "@mui/icons-material/QrCodeScannerOutlined";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   Alert,
-  Button,
 } from "@mui/material";
 import { CheckCircleOutline } from "@mui/icons-material";
 import LixiButton from "../component/LixiButton";
@@ -105,7 +99,8 @@ export default function Setting() {
     popUp
       .open({
         title: "DELETE ACCOUNT",
-        message: "Please backup your seed before delete account to avoid lost your account!",
+        message:
+          "Please backup your seed before delete account to avoid lost your account!",
         buttons: [
           { id: "delete-cancel", type: "cancel" },
           { id: "delete-ok", type: "ok" },
@@ -131,6 +126,32 @@ export default function Setting() {
         </div>
       </div>
       <div className="setting-content">
+        <div className="setting-item">
+          <p className="title">Verify address</p>
+          <Alert
+            icon={
+              <CheckCircleOutline className="ico-alert" fontSize="inherit" />
+            }
+            severity="warning"
+          >
+            Please verify every 1 month to keep your address always updated on
+            Telegram.
+          </Alert>
+          <Accordion className="collapse-backup-seed">
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <p>Click to verify your address</p>
+            </AccordionSummary>
+            <AccordionDetails>
+              <p>eCash:qp8ks7622cklc7c9pm2d3ktwzctack6njq6q83ed9x</p>
+              <LixiButton title="Verify" onClickItem={handleDeleteAccount} />
+            </AccordionDetails>
+          </Accordion>
+        </div>
+
         <div className="setting-item">
           <p className="title">Backup seed phrase</p>
           <Alert
@@ -179,10 +200,7 @@ export default function Setting() {
               <p>Click to delete account</p>
             </AccordionSummary>
             <AccordionDetails>
-              <LixiButton
-                title="Delete"
-                onClickItem={handleDeleteAccount}
-              />
+              <LixiButton title="Delete" onClickItem={handleDeleteAccount} />
             </AccordionDetails>
           </Accordion>
         </div>

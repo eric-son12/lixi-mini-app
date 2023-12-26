@@ -100,7 +100,7 @@ export default function ImportWallet() {
   }, [mainButton, backButton]);
 
   const onMainButtonClick = () => {
-    importWallet();
+    importWallet;
   };
 
   const onBackButtonClick = () => {
@@ -118,7 +118,8 @@ export default function ImportWallet() {
   };
 
   const handleSeedPhrase = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSeedPhrase(event.target.value);
+    const { value } = event.target;
+    setSeedPhrase(value);
   };
 
   const importWallet = () => {

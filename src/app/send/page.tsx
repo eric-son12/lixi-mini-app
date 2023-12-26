@@ -16,6 +16,7 @@ import QrCodeScannerOutlinedIcon from "@mui/icons-material/QrCodeScannerOutlined
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import {
+  Alert,
   Button,
   Dialog,
   DialogActions,
@@ -28,6 +29,7 @@ import {
 } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
 import PersonIcon from "@mui/icons-material/Person";
+import { CheckCircleOutline } from "@mui/icons-material";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -89,6 +91,7 @@ export default function Send() {
   const [error, setError] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
   const [address, setAddress] = useState<string>("");
+  const [addressNotVerify, setAddressNotVerify] = useState<boolean>(false);
   const [amount, setAmount] = useState<number>(0);
   const [handleName, setHandleName] = useState<string>("");
   const [open, setOpen] = React.useState(false);
@@ -132,8 +135,8 @@ export default function Send() {
     haptic.notificationOccurred("warning");
     popUp
       .open({
-        title: "Warning",
-        message: "Please double check ipput",
+        title: "Confirm",
+        message: "Please double check input before send.",
         buttons: [
           { id: "send-cancel", type: "cancel" },
           { id: "send-ok", type: "ok" },
@@ -141,6 +144,7 @@ export default function Send() {
       })
       .then((rs) => {
         console.log(rs);
+        setSuccess(true);
       })
       .catch((err) => {
         console.log(err);
@@ -173,17 +177,24 @@ export default function Send() {
   };
 
   const handleAdress = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAddress(event.target.value);
+    const { value } = event.target;
+    setAddress(value);
   };
 
   const handleAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(parseInt(event.target.value));
+    const { value } = event.target;
+    setAmount(parseInt(value));
   };
 
   const handleInputName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setHandleName(event.target.value);
-    if (event.target.value == "@ericson") {
+    const { value } = event.target;
+    setHandleName(value);
+    if (value == "@ericson") {
       setAddress("ecash:qp8ks7622cklc7c9pm2d3ktwzctack6njq6q83ed9x");
+    }
+    if (value == "@nghiacc") {
+      setAddress("ecash:qzmxql6wqqdlspcasdzelxy3c4tvnv7c6q7j82u8wn");
+      setAddressNotVerify(true);
     }
   };
 
@@ -235,11 +246,15 @@ export default function Send() {
               label="Wallet address"
               placeholder="Paste address here"
               value={address}
-              color="info"
+              color={addressNotVerify ? "warning" : "info"}
               onChange={handleAdress}
               variant="outlined"
               error={error}
-              helperText={error && "Incorrect address."}
+              helperText={
+                (error && "Incorrect address.") ||
+                (addressNotVerify &&
+                  "The address has not been activated for a long time.")
+              }
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -298,9 +313,17 @@ export default function Send() {
           open={success}
           onClose={handleClose}
           autoHideDuration={2000}
-          message={"ahihi"}
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        />
+        >
+          <Alert
+            icon={
+              <CheckCircleOutline className="ico-alert" fontSize="inherit" />
+            }
+            severity="success"
+          >
+            Transaction has been sent.
+          </Alert>
+        </Snackbar>
       </Stack>
     </>
   );
