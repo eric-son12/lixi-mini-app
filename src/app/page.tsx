@@ -88,7 +88,7 @@ const FunctionalBar = styled.div`
 export default function Home() {
   const router = useRouter();
 
-  const initData = useInitData();
+  // const initData = useInitData();
 
   // const initDataJson = useMemo(() => {
   //   if (!initData) {
@@ -122,21 +122,21 @@ export default function Home() {
   //   return initData;
   // }, [initData]);
 
-  useEffect(() => {
-    if (initData) {
-      let startParams = initData?.startParam || "";
-      if (startParams) {
-        localStorage.setItem("initDATA", JSON.stringify(initData));
-        localStorage.setItem("startParams", startParams);
-        const objStartParams = JSON.parse(atob(startParams));
-        if (objStartParams) {
-          router.push(`/send/?handleName=${objStartParams?.handleName}&address=${objStartParams?.address}&amount=${objStartParams?.amount}`);
-        }
-      }
-    } else {
-      return;
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (initData) {
+  //     let startParams = initData?.startParam || "";
+  //     if (startParams) {
+  //       localStorage.setItem("initDATA", JSON.stringify(initData));
+  //       localStorage.setItem("startParams", startParams);
+  //       const objStartParams = JSON.parse(atob(startParams));
+  //       if (objStartParams) {
+  //         router.push(`/send/?handleName=${objStartParams?.handleName}&address=${objStartParams?.address}&amount=${objStartParams?.amount}`);
+  //       }
+  //     }
+  //   } else {
+  //     return;
+  //   }
+  // }, []);
 
   // useEffect(() => {
   //   let data = {
@@ -162,30 +162,30 @@ export default function Home() {
     router.push("/import-wallet");
   };
   return (
-    <ContainerHome>
-      <FeatureEducation>
-        <img className="feature-banner" src="/lixi-credit.svg" alt="" />
-        <h3 className="feature-title">
-          Send crypto currencies to anyone on Telegram.
-        </h3>
-        <p className="feature-subtitle">
-          Lixi app allows you to privately store, manage, and use your crypto
-          funds without having to trust a centralized bank or exchange
-        </p>
-      </FeatureEducation>
-      <FunctionalBar>
-        <LixiButton
-          title="Create new account"
-          classCustom="create-new-account"
-          onClickItem={() => navigateWallet()}
-        />
+      <ContainerHome>
+        <FeatureEducation>
+          <img className="feature-banner" src="/lixi-credit.svg" alt="" />
+          <h3 className="feature-title">
+            Send crypto currencies to anyone on Telegram.
+          </h3>
+          <p className="feature-subtitle">
+            Lixi app allows you to privately store, manage, and use your crypto
+            funds without having to trust a centralized bank or exchange
+          </p>
+        </FeatureEducation>
+        <FunctionalBar>
+          <LixiButton
+            title="Create new account"
+            classCustom="create-new-account"
+            onClickItem={() => navigateWallet()}
+          />
 
-        <LixiButton
-          title="Import from backup"
-          classCustom="no-border-btn import-backup"
-          onClickItem={() => navigateImport()}
-        />
-      </FunctionalBar>
-    </ContainerHome>
+          <LixiButton
+            title="Import from backup"
+            classCustom="no-border-btn import-backup"
+            onClickItem={() => navigateImport()}
+          />
+        </FunctionalBar>
+      </ContainerHome>
   );
 }

@@ -14,12 +14,20 @@
     "@fontsource/roboto": "^5.0.8",
     "@mui/icons-material": "^5.14.19",
     "@mui/material": "^5.14.20",
+    "@reduxjs/toolkit": "^2.0.1",
     "@tma.js/sdk-react": "^0.5.0",
+    "connected-next-router": "^5.0.0",
     "next": "14.0.3",
+    "next-redux-wrapper": "^8.1.0",
     "qr-code-styling": "^1.6.0-rc.1",
     "react": "^18",
     "react-copy-to-clipboard": "^5.1.0",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-redux": "^9.0.4",
+    "redux": "^5.0.0",
+    "redux-persist": "^6.0.0",
+    "redux-saga": "^1.2.3",
+    "redux-thunk": "^3.1.0"
   },
   "devDependencies": {
     "@types/node": "^20",

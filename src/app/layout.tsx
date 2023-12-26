@@ -4,6 +4,7 @@ import "./globals.css";
 import { TmaSDKLoader } from "./component/TmaSDKLoader";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme/theme";
+import StoreProvider from "./StoreProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,13 +19,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <ThemeProvider theme={theme}>
-          <TmaSDKLoader>{children}</TmaSDKLoader>
-          {/* {children} */}
-        </ThemeProvider>
-      </body>
-    </html>
+      <html lang="en">
+        <body className={inter.className}>
+          <StoreProvider>
+            <ThemeProvider theme={theme}>
+              {/* <TmaSDKLoader>{children}</TmaSDKLoader> */}
+              {children}
+            </ThemeProvider>
+          </StoreProvider>
+        </body>
+      </html>
   );
 }
