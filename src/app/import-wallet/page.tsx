@@ -15,7 +15,13 @@ import {
   TextField,
   Tooltip,
 } from "@mui/material";
-import { useBackButton, useHapticFeedback, useMainButton, usePopup, useQRScanner } from "@tma.js/sdk-react";
+import {
+  useBackButton,
+  useHapticFeedback,
+  useMainButton,
+  usePopup,
+  useQRScanner,
+} from "@tma.js/sdk-react";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import QrCodeScannerOutlinedIcon from "@mui/icons-material/QrCodeScannerOutlined";
 import { CheckCircleOutline } from "@mui/icons-material";
@@ -85,10 +91,13 @@ export default function ImportWallet() {
   useEffect(() => {
     mainButton.enable().show();
     mainButton.setText("Import");
-    mainButton.on("click", onMainButtonClick());
-    backButton.on("click", onBackButtonClick());
     backButton.show();
   }, []);
+
+  useEffect(() => {
+    mainButton.on("click", onMainButtonClick);
+    backButton.on("click", onBackButtonClick);
+  }, [mainButton, backButton]);
 
   const onMainButtonClick = () => {
     importWallet();
@@ -167,7 +176,7 @@ export default function ImportWallet() {
               endAdornment: (
                 <InputAdornment position="end">
                   <div onClick={scanQRCode}>
-                  <QrCodeScannerOutlinedIcon />
+                    <QrCodeScannerOutlinedIcon />
                   </div>
                 </InputAdornment>
               ),

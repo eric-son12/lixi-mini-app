@@ -161,8 +161,8 @@ export default function Receive() {
   }, []);
 
   useEffect(() => {
-    mainButton.on("click", onMainButtonClick());
-    backButton.on("click", onBackButtonClick());
+    mainButton.on("click", onMainButtonClick);
+    backButton.on("click", onBackButtonClick);
   }, [mainButton, backButton]);
 
   const onMainButtonClick = () => {
