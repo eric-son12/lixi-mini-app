@@ -24,7 +24,7 @@ const WalletInfoContainer = styled.div`
   }
   .balance {
     width: 100%;
-    margin: 1rem 0;
+    margin-top: 1rem;
     align-self: flex-start;
     .balance-header {
       display: flex;
@@ -33,11 +33,14 @@ const WalletInfoContainer = styled.div`
         font-size: 18px;
         font-weight: 500;
       }
+      .hidden-balance {
+        height: 24px;
+      }
     }
     .balance-content {
       text-align: center;
       padding: 2rem;
-      background: #303031;
+      background: #2C2C2C;
       margin: 1rem 0;
       border-radius: 0.5rem;
       .amount {
@@ -75,19 +78,21 @@ const WalletInfoContainer = styled.div`
     }
   }
   .transaction-history {
+    width: 100%;
     display: grid;
     grid-template-rows: auto 1fr;
-    margin-top: 2rem;
-    padding: 1rem;
-    background: #303031;
+    margin-top: 1rem;
+    background: #2C2C2C;
     border-radius: 1rem;
     .title {
       font-size: 12px;
       font-weight: 400;
       text-transform: uppercase;
+      padding: 1rem;
+      padding-bottom: 0;
     }
     .transaction-detail {
-      padding: 1rem 0;
+      padding: 0.5rem 0;
     }
     .ghost-town {
       display: flex;
@@ -110,6 +115,38 @@ const WalletInfoContainer = styled.div`
         letter-spacing: 0.25px;
       }
     }
+    .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #383838;
+      border-left: 0;
+      border-right: 0;
+      padding: 1rem;
+      background: #333;
+      margin: 0.5rem 0;
+      .tx-history {
+        .amount {
+          font-size: 16px;
+          font-weight: 500;
+          // color: #ffb4a9;
+          color: #73daa5;
+        }
+        .username {
+          font-size: 14px;
+          color: #e0e4e7;
+          letter-spacing: 0.25px;
+          margin-top: 4px;
+        }
+      }
+      .date-time {
+        font-size: 12px;
+        color: #d5d5d5;
+      }
+      &:last-child {
+        // border-bottom: 1px solid gray;
+      }
+    }
   }
 `;
 
@@ -121,7 +158,7 @@ export default function Wallet() {
   const handleHideBalance = () => {
     haptic.impactOccurred('heavy');
     setHideBalance(!hideBalance);
-  }
+  };
 
   const navigateReceive = () => {
     router.push("/receive");
@@ -130,7 +167,6 @@ export default function Wallet() {
   const navigateSend = () => {
     router.push("/send");
   };
-
 
   return (
     <ContainerWallet>
@@ -146,7 +182,7 @@ export default function Wallet() {
         <div className="balance">
           <div className="balance-header">
             <h2 className="title-balance">Total balance:</h2>
-            <div onClick={handleHideBalance}>
+            <div className="hidden-balance" onClick={handleHideBalance}>
               {hideBalance ? (
                 <RemoveRedEyeOutlinedIcon />
               ) : (
@@ -163,7 +199,7 @@ export default function Wallet() {
             ) : (
               <>
                 <p className="amount">
-                  14,624 <span>XEC</span>
+                  33,542 <span>XEC</span>
                 </p>
                 <p className="fiat-rate">~ 2.20 USD</p>
               </>
@@ -185,16 +221,34 @@ export default function Wallet() {
         <div className="transaction-history">
           <h5 className="title">Transaction History</h5>
           <div className="transaction-detail">
-            {/* <div className="item">
-
-            </div> */}
-            <div className="ghost-town">
+            <div className="item">
+              <div className="tx-history">
+                <p className="amount">+29,190.35 XEC</p>
+                <p className="username">From: Nghiacc <img width={12} height={12} src="/telegram-ico.svg" alt="telegram icon" /></p>
+              </div>
+              <div className="date-time">26/12/2023</div>
+            </div>
+            <div className="item">
+              <div className="tx-history">
+                <p style={{color: '#ffb4a9'}} className="amount">-2453.09 XEC</p>
+                <p className="username">From: Nghiacc <img width={12} height={12} src="/telegram-ico.svg" alt="telegram icon" /></p>
+              </div>
+              <div className="date-time">26/12/2023</div>
+            </div>
+            <div className="item">
+              <div className="tx-history">
+                <p className="amount">+6805.82 XEC</p>
+                <p className="username">From: Vince <img width={12} height={12} src="/telegram-ico.svg" alt="telegram icon" /></p>
+              </div>
+              <div className="date-time">26/12/2023</div>
+            </div>
+            {/* <div className="ghost-town">
               <img src="/ghost.svg" alt="" />
               <h4 className="blank-title">No History Yet</h4>
               <p className="blank-subtitle">
                 Once you start making transactions, they will appear here.
               </p>
-            </div>
+            </div> */}
           </div>
         </div>
       </WalletInfoContainer>

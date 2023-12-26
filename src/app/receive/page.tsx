@@ -1,27 +1,24 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import _ from "lodash";
 import {
   useBackButton,
   useHapticFeedback,
   useMainButton,
   usePopup,
 } from "@tma.js/sdk-react";
-import Tooltip, { TooltipProps } from "@mui/material/Tooltip";
-import { Button, TextField } from "@mui/material";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { shareOnMobile } from "react-mobile-share";
+import { TextField } from "@mui/material";
 import styled from "@emotion/styled";
 import QRCodeStyling, {
   Options as QRCodeStylingOptions,
 } from "qr-code-styling";
 import FormControl from "@mui/material/FormControl";
 import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-
-const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
-  <Tooltip {...props} classes={{ popper: className }} />
-))(({ theme }) => ({}));
 
 const ContainerReceive = styled.div`
   padding: 1rem;
@@ -58,6 +55,7 @@ const ContainerReceive = styled.div`
   }
   .coin-address {
     .address-string {
+      max-width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -142,9 +140,11 @@ const useQRCodeStyling = (
 
 export default function Receive() {
   const router = useRouter();
-  const [address, setAddress] = useState<string>(
+  const addressAcount = "qp8ks7622cklc7c9pm2d3ktwzctack6njq6q83ed9x";
+  const [request, setRequest] = useState<string>(
     "qp8ks7622cklc7c9pm2d3ktwzctack6njq6q83ed9x"
   );
+  const [shareMobile, setShareMobile] = useState<string>("");
   const qrCode = useQRCodeStyling(qrOptions);
   const ref = useRef<any>(null);
 
@@ -165,13 +165,19 @@ export default function Receive() {
   }, [mainButton, backButton]);
 
   const onMainButtonClick = () => {
-    popUp.open({
-      title: "Receive info",
-      message:
-        "You can copy and share your wallet address by clicking on the address. You can also share your wallet QRCode.",
-      buttons: [{ id: "receive-ok", type: "ok" }],
+    // popUp.open({
+    //   title: "Receive info",
+    //   message:
+    //     "You can copy and share your wallet address by clicking on the address. You can also share your wallet QRCode.",
+    //   buttons: [{ id: "receive-ok", type: "ok" }],
+    // });
+    // popUp.isOpened;
+    // haptic.impactOccurred("medium");
+    shareOnMobile({
+      // text: "Hey checkout our package react-mobile-share",
+      // url: "https://www.npmjs.com/package/react-mobile-share",
+      title: shareMobile,
     });
-    popUp.isOpened;
   };
 
   const onBackButtonClick = () => {
@@ -182,28 +188,6 @@ export default function Receive() {
 
   const copyTextToClipboard = () => {
     haptic.impactOccurred("medium");
-
-    if (!navigator.clipboard) {
-      var textArea = document.createElement("textarea");
-      textArea.value = address;
-
-      textArea.style.top = "0";
-      textArea.style.left = "0";
-      textArea.style.position = "fixed";
-
-      document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
-
-      try {
-        var successful = document.execCommand("copy");
-        var msg = successful ? "successful" : "unsuccessful";
-      } catch (err) {}
-
-      document.body.removeChild(textArea);
-
-      return;
-    }
   };
 
   useEffect(() => {
@@ -211,14 +195,30 @@ export default function Receive() {
   }, [ref, qrCode]);
 
   useEffect(() => {
-    qrCode?.update({ data: address });
-  }, [address, qrCode]);
+    qrCode?.update({ data: request });
+  }, [request, qrCode]);
 
-  const onAddressChange:
+  useEffect(() => {
+    setShareMobile(`https://lixi-mini-app.vercel.app/startapp=${request}`);
+  }, [request]);
+
+  const debounceAmount = useCallback(
+    _.debounce(
+      (nextValue) =>
+        nextValue > 0
+          ? setRequest(`${addressAcount}?amount=${nextValue}`)
+          : setRequest(addressAcount),
+      1000
+    ),
+    []
+  );
+
+  const onRequestChange:
     | React.ChangeEventHandler<HTMLInputElement>
     | undefined = (event) => {
     event.preventDefault();
-    setAddress(event.target.value);
+    const { value } = event.target;
+    debounceAmount(value);
   };
 
   const TooltipReceive = () => {
@@ -242,11 +242,6 @@ export default function Receive() {
         <div className="header-receive">
           <h2 className="title">Receive</h2>
           <InfoOutlinedIcon />
-          {/* <HtmlTooltip className="tooltip-info" title={TooltipReceive()}>
-            <IconButton>
-              <InfoOutlinedIcon />
-            </IconButton>
-          </HtmlTooltip> */}
         </div>
       </div>
       <div className="receive-form">
@@ -264,17 +259,21 @@ export default function Receive() {
                 </InputAdornment>
               ),
             }}
-            // onChange={onAddressChange}
+            onChange={onRequestChange}
           />
         </FormControl>
       </div>
       <div className="coin-address">
         <div style={{ textAlign: "center" }} ref={ref}></div>
-        <div className="address-string" onClick={copyTextToClipboard}>
+        <div className="address-string">
           <ContentPasteIcon />
           <span>
-            <span style={{ color: "#01abe8" }}>ecash:</span>
-            {address}
+            <CopyToClipboard text={request} onCopy={copyTextToClipboard}>
+              <>
+              <span style={{ color: "#01abe8" }}>ecash:</span>
+              {request}
+              </>
+            </CopyToClipboard>
           </span>
         </div>
       </div>

@@ -23,8 +23,8 @@ export default function RootLayout({
         <body className={inter.className}>
           <StoreProvider>
             <ThemeProvider theme={theme}>
-              {/* <TmaSDKLoader>{children}</TmaSDKLoader> */}
-              {children}
+              <TmaSDKLoader>{children}</TmaSDKLoader>
+              {/* {children} */}
             </ThemeProvider>
           </StoreProvider>
         </body>
