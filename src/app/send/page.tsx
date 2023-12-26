@@ -17,7 +17,9 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import {
   Alert,
+  Backdrop,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -144,7 +146,11 @@ export default function Send() {
       })
       .then((rs) => {
         console.log(rs);
-        setSuccess(true);
+        setLoading(true);
+        setTimeout(() => {
+          setLoading(false);
+          setSuccess(true);
+        }, 2000);
       })
       .catch((err) => {
         console.log(err);
@@ -289,7 +295,7 @@ export default function Send() {
           </FormControl>
         </form>
       </ContainerSend>
-      <Dialog
+      {/* <Dialog
         open={open}
         TransitionComponent={Transition}
         keepMounted
@@ -307,7 +313,14 @@ export default function Send() {
           <Button onClick={handleClose}>Disagree</Button>
           <Button onClick={handleClose}>Agree</Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+        onClick={handleClose}
+      >
+        <CircularProgress color={"inherit"} />
+      </Backdrop>
       <Stack>
         <Snackbar
           open={success}

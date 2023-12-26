@@ -100,7 +100,7 @@ export default function ImportWallet() {
   }, [mainButton, backButton]);
 
   const onMainButtonClick = () => {
-    importWallet;
+    importWallet();
   };
 
   const onBackButtonClick = () => {
