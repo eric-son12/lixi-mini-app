@@ -178,11 +178,11 @@ export default function Receive() {
   };
 
   const onBackButtonClick = () => {
-    router.back();
     backButton.hide();
     mainButton.hide();
     mainButton.off('click', onMainButtonClick);
     backButton.off('click', onBackButtonClick);
+    router.back();
   };
 
   const copyTextToClipboard = () => {

@@ -158,11 +158,11 @@ export default function Send() {
   };
 
   const onBackButtonClick = () => {
-    router.back();
     backButton.hide();
     mainButton.hide();
-    mainButton.off('click', onMainButtonClick);
-    backButton.off('click', onBackButtonClick);
+    mainButton.off("click", onMainButtonClick);
+    backButton.off("click", onBackButtonClick);
+    router.back();
   };
 
   const ScanQRCode = () => {
@@ -259,8 +259,11 @@ export default function Send() {
               error={error}
               helperText={
                 (error && "Incorrect address.") ||
-                (addressNotVerify &&
-                  <p style={{color: '#ffa726'}}>The address has not been activated for a long time.</p>)
+                (addressNotVerify && (
+                  <p style={{ color: "#ffa726" }}>
+                    The address has not been activated for a long time.
+                  </p>
+                ))
               }
               InputProps={{
                 endAdornment: (
@@ -324,6 +327,7 @@ export default function Send() {
       </Backdrop>
       <Stack>
         <Snackbar
+          style={{ width: "100%" }}
           open={success}
           onClose={handleClose}
           autoHideDuration={2000}

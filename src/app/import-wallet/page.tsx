@@ -100,15 +100,15 @@ export default function ImportWallet() {
   }, [mainButton, backButton]);
 
   const onMainButtonClick = () => {
-    importWallet;
+    importWallet();
   };
 
   const onBackButtonClick = () => {
-    router.back();
     backButton.hide();
     mainButton.hide();
     mainButton.off('click', onMainButtonClick);
     backButton.off('click', onBackButtonClick);
+    router.back();
   };
 
   const scanQRCode = () => {
@@ -216,7 +216,7 @@ export default function ImportWallet() {
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         />
       </Stack>
-      <Button onClick={importWallet}>Import</Button>
+      {/* <Button onClick={importWallet}>Import</Button> */}
     </ContainerImportWallet>
   );
 }
