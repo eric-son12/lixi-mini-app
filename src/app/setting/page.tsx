@@ -114,6 +114,29 @@ export default function Setting() {
         ],
       })
       .then((rs) => {
+        if (rs === 'delete-ok') {
+          localStorage.removeItem('accounts');
+        }
+        console.log(rs);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleVerifyAddress = () => {
+    haptic.notificationOccurred("warning");
+    popUp
+      .open({
+        title: "VERIFY ADDRESS",
+        message:
+          "Your address: eCash:qp8ks7622cklc7c9pm2d3ktwzctack6njq6q83ed9x",
+        buttons: [
+          { id: "delete-cancel", type: "cancel" },
+          { id: "delete-ok", type: "ok" },
+        ],
+      })
+      .then((rs) => {
         // if (rs === 'delete-ok') {
 
         // }
@@ -156,7 +179,7 @@ export default function Setting() {
               <p className="address-string">
                 eCash:qp8ks7622cklc7c9pm2d3ktwzctack6njq6q83ed9x
               </p>
-              <LixiButton title="Verify" onClickItem={handleDeleteAccount} />
+              <LixiButton title="Verify" onClickItem={handleVerifyAddress} />
             </AccordionDetails>
           </Accordion>
         </div>
