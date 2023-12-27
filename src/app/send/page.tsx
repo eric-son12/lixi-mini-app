@@ -32,6 +32,7 @@ import {
 import { TransitionProps } from "@mui/material/transitions";
 import PersonIcon from "@mui/icons-material/Person";
 import { CheckCircleOutline } from "@mui/icons-material";
+import LixiButton from "../component/LixiButton";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -327,13 +328,13 @@ export default function Send() {
       </Backdrop>
       <Stack>
         <Snackbar
-          style={{ width: "100%" }}
           open={success}
           onClose={handleClose}
-          autoHideDuration={2000}
+          autoHideDuration={10000}
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         >
           <Alert
+            style={{ width: "100%" }}
             icon={
               <CheckCircleOutline className="ico-alert" fontSize="inherit" />
             }

@@ -66,6 +66,13 @@ const ContainerSetting = styled.div`
     button {
       width: 100%;
     }
+    .address-string {
+      font-size: 14px;
+      font-weight: 500;
+      text-align: center;
+      margin: 1rem 0;
+      color: #28a5e0;
+    }
   }
   .collapse-backup-seed {
     margin: 0 !important;
@@ -146,7 +153,9 @@ export default function Setting() {
               <p>Click to verify your address</p>
             </AccordionSummary>
             <AccordionDetails>
-              <p>eCash:qp8ks7622cklc7c9pm2d3ktwzctack6njq6q83ed9x</p>
+              <p className="address-string">
+                eCash:qp8ks7622cklc7c9pm2d3ktwzctack6njq6q83ed9x
+              </p>
               <LixiButton title="Verify" onClickItem={handleDeleteAccount} />
             </AccordionDetails>
           </Accordion>
