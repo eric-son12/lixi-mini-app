@@ -107,6 +107,8 @@ export default function ImportWallet() {
     router.back();
     backButton.hide();
     mainButton.hide();
+    mainButton.off('click', onMainButtonClick);
+    backButton.off('click', onBackButtonClick);
   };
 
   const scanQRCode = () => {

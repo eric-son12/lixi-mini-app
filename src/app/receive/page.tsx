@@ -163,6 +163,7 @@ export default function Receive() {
   useEffect(() => {
     mainButton.on("click", onMainButtonClick);
     backButton.on("click", onBackButtonClick);
+    
   }, [mainButton, backButton]);
 
   const onMainButtonClick = () => {
@@ -181,6 +182,8 @@ export default function Receive() {
     router.back();
     backButton.hide();
     mainButton.hide();
+    mainButton.off('click', onMainButtonClick);
+    backButton.off('click', onBackButtonClick);
   };
 
   const copyTextToClipboard = () => {

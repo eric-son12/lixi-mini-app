@@ -124,13 +124,12 @@ export default function Send() {
   useEffect(() => {
     mainButton.enable().show();
     backButton.show();
+    mainButton.setText("Send");
   }, []);
 
   useEffect(() => {
     mainButton.on("click", onMainButtonClick);
     backButton.on("click", onBackButtonClick);
-    isConfirm ? mainButton.setText("Confirm") : mainButton.setText("Send");
-    isConfirm ? backButton.hide() : backButton.show();
   }, [mainButton, backButton]);
 
   const onMainButtonClick = () => {
@@ -162,6 +161,8 @@ export default function Send() {
     router.back();
     backButton.hide();
     mainButton.hide();
+    mainButton.off('click', onMainButtonClick);
+    backButton.off('click', onBackButtonClick);
   };
 
   const ScanQRCode = () => {
@@ -259,7 +260,7 @@ export default function Send() {
               helperText={
                 (error && "Incorrect address.") ||
                 (addressNotVerify &&
-                  "The address has not been activated for a long time.")
+                  <p style={{color: '#ffa726'}}>The address has not been activated for a long time.</p>)
               }
               InputProps={{
                 endAdornment: (
