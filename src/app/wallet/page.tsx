@@ -140,7 +140,7 @@ const WalletInfoContainer = styled.div`
         }
       }
       .date-time {
-        font-size: 12px;
+        font-size: 10px;
         color: #d5d5d5;
       }
       &:last-child {

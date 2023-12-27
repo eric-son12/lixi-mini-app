@@ -100,7 +100,7 @@ export default function ImportWallet() {
   }, [mainButton, backButton]);
 
   const onMainButtonClick = () => {
-    importWallet();
+    importWallet;
   };
 
   const onBackButtonClick = () => {
@@ -125,12 +125,12 @@ export default function ImportWallet() {
   };
 
   const importWallet = () => {
-    let result = false;
-    result =
-      seedPhrase ===
-      "firm panther globe worry affair solve monitor reason carpet yellow return labor"
-        ? true
-        : false;
+    let result = true;
+    // result =
+    //   seedPhrase ===
+    //   "firm panther globe worry affair solve monitor reason carpet yellow return labor"
+    //     ? true
+    //     : false;
     // Call API to import seed phrase
     setLoading(true);
     setTimeout(() => {
@@ -216,7 +216,7 @@ export default function ImportWallet() {
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         />
       </Stack>
-      {/* <Button onClick={importWallet}>Import</Button> */}
+      <Button onClick={importWallet}>Import</Button>
     </ContainerImportWallet>
   );
 }

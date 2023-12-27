@@ -171,10 +171,9 @@ export default function Receive() {
     shareOnMobile(
       {
         text: shareMobile,
-        url: "https://www.npmjs.com/package/react-mobile-share",
-        title: shareMobile,
-      },
-      (message) => alert(message)
+        // url: "https://www.npmjs.com/package/react-mobile-share",
+        title: shareMobile
+      }
     );
   };
 
