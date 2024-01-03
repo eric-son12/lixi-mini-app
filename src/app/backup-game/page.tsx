@@ -168,7 +168,7 @@ export default function BackupGame() {
   const haptic = useHapticFeedback();
 
   useEffect(() => {
-    backButton.show();
+    mainButton.enable().show();
     backButton.show();
     mainButton.setText("Continue");
   }, []);
