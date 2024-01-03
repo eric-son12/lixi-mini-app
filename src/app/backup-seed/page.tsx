@@ -2,12 +2,6 @@
 import React from "react";
 import styled from "@emotion/styled";
 
-export type BackupWordModel = {
-  word: string;
-  isBlur: boolean;
-  isCorrect: boolean;
-};
-
 const WordAlignment = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -39,12 +33,18 @@ const WordAlignment = styled.div`
   }
 `;
 
-type PageBackupSeedProps = {
-  mnemonicWords: BackupWordModel[];
-  isPlayGame: boolean;
+export type BackupWordModel = {
+  word: string;
+  isBlur: boolean;
+  isCorrect: boolean;
 };
 
-const BackupSeed = ({ mnemonicWords, isPlayGame }: PageBackupSeedProps) => {
+type BackupSeedProps = {
+  mnemonicWords?: BackupWordModel[];
+  isPlayGame?: boolean;
+};
+
+const BackupSeed = ({ mnemonicWords, isPlayGame }: BackupSeedProps) => {
   return (
     <WordAlignment>
       {mnemonicWords &&
@@ -63,6 +63,6 @@ const BackupSeed = ({ mnemonicWords, isPlayGame }: PageBackupSeedProps) => {
         })}
     </WordAlignment>
   );
-}
+};
 
 export default React.memo(BackupSeed);
