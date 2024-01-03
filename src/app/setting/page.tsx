@@ -114,8 +114,8 @@ export default function Setting() {
         ],
       })
       .then((rs) => {
-        if (rs === 'delete-ok') {
-          localStorage.removeItem('accounts');
+        if (rs === "delete-ok") {
+          localStorage.removeItem("accounts");
         }
         console.log(rs);
       })
@@ -204,10 +204,10 @@ export default function Setting() {
               <p>Click to reveal seed phrase</p>
             </AccordionSummary>
             <AccordionDetails>
-              <p className="seed-phrase">
-                firm panther globe worry affair solve monitor reason carpet
-                yellow return labor
-              </p>
+              <LixiButton
+                title="Backup seed game"
+                onClickItem={() => router.push("/backup-game")}
+              />
             </AccordionDetails>
           </Accordion>
         </div>
