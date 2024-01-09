@@ -1,6 +1,6 @@
 import { all } from 'redux-saga/effects';
 
-// import accountSaga from './account/saga';
+import accountSaga from './account/saga';
 // import analyticEventSaga from './analytic-event/saga';
 // import burnSaga from './burn/saga';
 // import categorySaga from './category/saga';
@@ -17,15 +17,15 @@ import { all } from 'redux-saga/effects';
 // import sendSaga from './send/saga';
 // import settingsSaga from './settings/saga';
 // import tokenSaga from './token/saga';
-// import walletSaga from './wallet/saga';
+import walletSaga from './wallet/saga';
 // import webpushSaga from './webpush/saga';
-// import { websocketSaga } from './websocket/saga';
+import { websocketSaga } from './websocket/saga';
 // import worshipSaga from './worship/saga';
 
 export default function* rootSaga() {
   yield all([
-    // walletSaga(),
-    // accountSaga(),
+    walletSaga(),
+    accountSaga(),
     // localAccountSaga(),
     // lixiSaga(),
     // sendSaga(),
@@ -43,7 +43,7 @@ export default function* rootSaga() {
     // burnSaga(),
     // categorySaga(),
     // messageSaga(),
-    // websocketSaga(),
+    websocketSaga()
     // analyticEventSaga()
   ]);
 }

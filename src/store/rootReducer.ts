@@ -3,13 +3,12 @@ import { routerReducer } from 'connected-next-router';
 import { HYDRATE } from 'next-redux-wrapper';
 import { persistReducer } from 'redux-persist';
 import { createMigrate, PersistConfig } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'
+import storage from 'redux-persist/lib/storage';
 // import storage from 'redux-persist-indexeddb-storage';
 import { actionReducer } from './action/reducer';
 
-
-// import { accountReducer } from './account/reducer';
-// import { AccountsState } from './account/state';
+import { accountReducer } from './account/reducer';
+import { AccountsState } from './account/state';
 // import { actionReducer } from './action/reducer';
 // import { burnReducer } from './burn/reducer';
 // import { categoryReducer } from './category/reducer';
@@ -41,7 +40,7 @@ import { actionReducer } from './action/reducer';
 // import { SettingsState } from './settings/state';
 // import { toastReducer } from './toast/reducer';
 // import { tokenReducer, TokenState } from './token';
-// import { walletStateReducer } from './wallet/reducer';
+import { walletStateReducer } from './wallet/reducer';
 // import { api as worshipedPersonApi } from './worship/worshipedPerson.api';
 // import { messageReducer, PageMessageSessionState } from './message';
 
@@ -49,7 +48,7 @@ const persistConfig = {
   timeout: 1000,
   key: 'root',
   version: 0,
-  storage: storage,
+  storage: storage
   // blacklist: [
   //   'accounts',
   //   'router',
@@ -68,33 +67,34 @@ const persistConfig = {
   // migrate: createMigrate(migration, { debug: false })
 };
 
-// const walletPersistConfig = {
-//   key: 'wallet',
-//   storage: storage('lixi-indexeddb')
-// };
+const walletPersistConfig = {
+  key: 'wallet',
+  storage: storage
+};
 
 // const localAccountPersistConfig: PersistConfig<LocalUserAccountsState> = {
 //   key: 'localAccounts',
 //   storage: storage('lixi-indexeddb')
 // };
 
-// const accountPersistConfig: PersistConfig<AccountsState> = {
-//   key: 'accounts',
-//   storage: storage('lixi-indexeddb'),
-//   blacklist: [
-//     `envelopeUpload`,
-//     'pageCoverUpload',
-//     'pageAvatarUpload',
-//     'postCoverUploads',
-//     'messageUploads',
-//     'leaderBoard',
-//     'graphqlRequestLoading',
-//     'productImageUploads',
-//     'accountInfoTemp',
-//     'commentUpload'
-//   ],
-//   timeout: 0
-// };
+const accountPersistConfig: PersistConfig<AccountsState> = {
+  key: 'accounts',
+  storage: storage,
+  blacklist: [
+    `envelopeUpload`,
+    'pageCoverUpload',
+    'pageAvatarUpload',
+    'postCoverUploads',
+    'messageUploads',
+    'leaderBoard',
+    'graphqlRequestLoading',
+    'productImageUploads',
+    'accountInfoTemp',
+    'commentUpload'
+  ],
+  timeout: 0
+};
+
 // const postPersistConfig: PersistConfig<PostState> = {
 //   key: 'posts',
 //   storage: storage('lixi-indexeddb'),
@@ -144,8 +144,8 @@ const persistConfig = {
 
 export const serverReducer = combineReducers({
   router: routerReducer,
-  // wallet: walletStateReducer,
-  // accounts: accountReducer,
+  wallet: walletStateReducer,
+  accounts: accountReducer,
   // localAccounts: localUserAccountReducer,
   // posts: postReducer,
   // lixies: lixiReducer,
@@ -172,8 +172,8 @@ export const serverReducer = combineReducers({
 
 export const appReducer = combineReducers({
   router: routerReducer,
-  // wallet: persistReducer(walletPersistConfig, walletStateReducer),
-  // accounts: persistReducer(accountPersistConfig, accountReducer),
+  wallet: persistReducer(walletPersistConfig, walletStateReducer),
+  accounts: persistReducer(accountPersistConfig, accountReducer),
   // localAccounts: persistReducer(localAccountPersistConfig, localUserAccountReducer),
   // posts: persistReducer(postPersistConfig, postReducer),
   // lixies: persistReducer(lixiPersistConfig, lixiReducer),
