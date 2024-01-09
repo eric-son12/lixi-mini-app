@@ -20,7 +20,6 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
       "@local-store/*": ["./src/store/*"],
       "@models/*": ["./src/models/*"],
       "@components/*": ["./src/components/*"],

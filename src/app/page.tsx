@@ -1,9 +1,12 @@
-"use client";
-import { useRouter } from "next/navigation";
-import styled from "@emotion/styled";
-import LixiButton from "./component/LixiButton";
+'use client';
+import { useRouter } from 'next/navigation';
+import styled from '@emotion/styled';
+import LixiButton from './component/LixiButton';
 // import { useInitData } from "@tma.js/sdk-react";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo } from 'react';
+import { useAppDispatch } from '@local-store/hooks';
+import { generateAccount } from '@local-store/account';
+import { COIN } from '@models/index';
 
 const ContainerHome = styled.div`
   display: grid;
@@ -87,6 +90,7 @@ const FunctionalBar = styled.div`
 
 export default function Home() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   // const initData = useInitData();
 
@@ -148,44 +152,39 @@ export default function Home() {
   // },[])
 
   useEffect(() => {
-    const lcsAccount = localStorage.getItem("accounts");
-    if (lcsAccount === "true") {
+    const lcsAccount = localStorage.getItem('accounts');
+    if (lcsAccount === 'true') {
       navigateWallet();
     }
   }, []);
 
   const navigateWallet = () => {
-    router.push("/wallet");
+    // router.push('/wallet');
+    dispatch(generateAccount({ coin: COIN.XPI }));
   };
 
   const navigateImport = () => {
-    router.push("/import-wallet");
+    router.push('/import-wallet');
   };
   return (
-      <ContainerHome>
-        <FeatureEducation>
-          <img className="feature-banner" src="/lixi-credit.svg" alt="" />
-          <h3 className="feature-title">
-            Send crypto currencies to anyone on Telegram.
-          </h3>
-          <p className="feature-subtitle">
-            Lixi app allows you to privately store, manage, and use your crypto
-            funds without having to trust a centralized bank or exchange
-          </p>
-        </FeatureEducation>
-        <FunctionalBar>
-          <LixiButton
-            title="Create new account"
-            classCustom="create-new-account"
-            onClickItem={() => navigateWallet()}
-          />
+    <ContainerHome>
+      <FeatureEducation>
+        <img className="feature-banner" src="/lixi-credit.svg" alt="" />
+        <h3 className="feature-title">Send crypto currencies to anyone on Telegram.</h3>
+        <p className="feature-subtitle">
+          Lixi app allows you to privately store, manage, and use your crypto funds without having to trust a
+          centralized bank or exchange
+        </p>
+      </FeatureEducation>
+      <FunctionalBar>
+        <LixiButton title="Create new account" classCustom="create-new-account" onClickItem={() => navigateWallet()} />
 
-          <LixiButton
-            title="Import from backup"
-            classCustom="no-border-btn import-backup"
-            onClickItem={() => navigateImport()}
-          />
-        </FunctionalBar>
-      </ContainerHome>
+        <LixiButton
+          title="Import from backup"
+          classCustom="no-border-btn import-backup"
+          onClickItem={() => navigateImport()}
+        />
+      </FunctionalBar>
+    </ContainerHome>
   );
 }
