@@ -1,4 +1,4 @@
-import { Claim } from '@models/lib/claim';
+import { Claim } from '@models/index';
 import { createEntityAdapter, createReducer } from '@reduxjs/toolkit';
 
 import { saveClaimAddress, saveClaimCode, viewClaimFailure, viewClaimSuccess } from './actions';

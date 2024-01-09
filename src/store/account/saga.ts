@@ -4,11 +4,11 @@ import {
   CreateAccountCommand,
   DeleteAccountCommand,
   ImportAccountCommand,
-  Lixi,
   LocalUserAccount,
   LoginViaEmailCommand,
   RegisterViaEmailNoVerifiedCommand,
   RenameAccountCommand,
+  PatchAccountCommand,
   SecondaryLanguageAccountCommand
 } from '@models/index';
 import { COIN } from '@models/constants';
@@ -26,7 +26,6 @@ import { Config, names, uniqueNamesGenerator } from 'unique-names-generator';
 // import { LocalUser } from '../../models/localUser';
 
 // import { ChangeAccountLocaleCommand } from '@models/index';
-import { PatchAccountCommand } from '@models/index';
 import accountApi from '../account/api';
 // // import lixiApi from '../lixi/api';
 import { hideLoading, showLoading } from '../loading/actions';
@@ -184,14 +183,14 @@ function* postAccountSaga(action: PayloadAction<CreateAccountCommand>) {
   try {
     const command = action.payload;
 
-    yield put(showLoading(postAccount.type));
+    // yield put(showLoading(postAccount.type));
 
-    const data: AccountDto = yield call(accountApi.post, command);
+    // const data: AccountDto = yield call(accountApi.post, command);
 
     // Merge back to action payload
     const result = {
       ...command,
-      ...data,
+      // ...data,
       coin: command.coin
     } as Account;
 
@@ -204,7 +203,7 @@ function* postAccountSaga(action: PayloadAction<CreateAccountCommand>) {
 
 function* postAccountSuccessSaga(action: PayloadAction<Account>) {
   const account = action.payload;
-  if (account && account.address.includes(account.name)) {
+  if (account) {
     const newNameGenerator = uniqueNamesGenerator(nameConfigGenerator);
     const command: RenameAccountCommand = {
       id: account.id,
@@ -259,7 +258,7 @@ function* importAccountSaga(action: PayloadAction<string>) {
     // Merge back to action payload
     const account = { ...data } as Account;
 
-    const lixies: Lixi[] = [];
+    const lixies: any[] = [];
 
     try {
       // const lixiesData = (yield call(lixiApi.getByAccountId, account.id)) as Lixi[];
@@ -286,7 +285,7 @@ function* importAccountSaga(action: PayloadAction<string>) {
   }
 }
 
-function* importAccountSuccessSaga(action: PayloadAction<{ account: Account; lixies: Lixi[] }>) {
+function* importAccountSuccessSaga(action: PayloadAction<{ account: Account; lixies: any[] }>) {
   // yield put(
   //   showToast('success', {
   //     message: 'Success',
@@ -349,7 +348,7 @@ function* selectAccountSaga(action: PayloadAction<number>) {
 function* selectAccountSuccessSaga(
   action: PayloadAction<{
     account: Account;
-    lixies?: Lixi[];
+    lixies?: any[];
     previousAccount: Account;
   }>
 ) {

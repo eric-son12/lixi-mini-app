@@ -1,4 +1,4 @@
-// import useXPI from '@hooks/useXPI';
+import useXPI from '@hooks/useXPI';
 import createSagaMiddleware, { Task } from '@redux-saga/core';
 import { Action, Store, configureStore } from '@reduxjs/toolkit';
 import { AnyAction } from 'redux';
@@ -24,9 +24,9 @@ export const makeStore = (context?: Context) => {
     onError: (error: Error, { sagaStack: string }) => {
       console.log(error);
     },
-   //  context: {
-   //    useXPI: useXPI
-   //  }
+    context: {
+      useXPI: useXPI
+    }
   });
 
   const routerMiddleware = createRouterMiddleware();
@@ -66,7 +66,7 @@ export const makeStore = (context?: Context) => {
               'analyticEvent/batchEvents',
               'analyticEvent/analyticEvent'
             ]
-          },
+          }
     // preloadedState: initialState
   });
   setupListeners(store.dispatch);
@@ -75,7 +75,7 @@ export const makeStore = (context?: Context) => {
   return store;
 };
 
-const persistor = persistStore(makeStore());
+export const persistor = persistStore(makeStore());
 
 // Define utilities types for redux toolkit
 export type AppStore = ReturnType<typeof makeStore>;
@@ -84,4 +84,3 @@ export type AppDispatch = AppStore['dispatch'];
 export type AppThunkDispatch = ThunkDispatch<RootState, void, AnyAction>;
 export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, Action<string>>;
 export const wrapper = createWrapper<AppStore>(makeStore, { debug: true });
-export { persistor }

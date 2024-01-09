@@ -21,7 +21,7 @@
     ],
     "paths": {
       "@local-store/*": ["./src/store/*"],
-      "@models/*": ["./src/models/*"],
+      "@models/*": ["./src/model/*"],
       "@components/*": ["./src/components/*"],
       "@utils/*": ["./src/utils/*"],
       "@hooks/*": ["./src/hooks/*"],

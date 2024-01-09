@@ -7,7 +7,7 @@
   resolved "https://registry.npmjs.org/@aashutoshrathi/word-wrap/-/word-wrap-1.2.6.tgz"
   integrity sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==
 
-"@abcpros/bitcore-lib-xpi@^8.25.43":
+"@abcpros/bitcore-lib-xpi@^8.25.37":
   version "8.25.43"
   resolved "https://registry.yarnpkg.com/@abcpros/bitcore-lib-xpi/-/bitcore-lib-xpi-8.25.43.tgz#086edcb5b9018c0204e0779939cea69a9f2cd95a"
   integrity sha512-d9tSQMpFGcX3KGeqdSkQuGGnStjbloVYqZqechDgJyyI5ooY/B47EOhnrl9SHylff/Syp82Ow1UEm2Ng9tMzCA==

@@ -3,7 +3,7 @@ import { routerReducer } from 'connected-next-router';
 import { HYDRATE } from 'next-redux-wrapper';
 import { persistReducer } from 'redux-persist';
 import { createMigrate, PersistConfig } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import storage from './customStorage';
 // import storage from 'redux-persist-indexeddb-storage';
 import { actionReducer } from './action/reducer';
 
@@ -23,7 +23,7 @@ import { AccountsState } from './account/state';
 // import { lixiReducer } from './lixi/reducer';
 // import { LixiesState } from './lixi/state';
 // import { loadingReducer } from './loading/reducer';
-// import { localAccountsAdapter, localUserAccountReducer } from './localAccount/reducer';
+import { localUserAccountReducer } from './localAccount/reducer';
 // import { LocalUserAccountsState } from './localAccount/state';
 // import { modalReducer } from './modal/reducer';
 // import { actionSheetReducer } from './action-sheet/reducer';
@@ -41,6 +41,7 @@ import { AccountsState } from './account/state';
 // import { toastReducer } from './toast/reducer';
 // import { tokenReducer, TokenState } from './token';
 import { walletStateReducer } from './wallet/reducer';
+import { LocalUserAccountsState } from './localAccount';
 // import { api as worshipedPersonApi } from './worship/worshipedPerson.api';
 // import { messageReducer, PageMessageSessionState } from './message';
 
@@ -48,22 +49,22 @@ const persistConfig = {
   timeout: 1000,
   key: 'root',
   version: 0,
-  storage: storage
-  // blacklist: [
-  //   'accounts',
-  //   'router',
-  //   'modal',
-  //   'action-sheet',
-  //   'toast',
-  //   'wallet',
-  //   'api',
-  //   'root',
-  //   'posts',
-  //   'pages',
-  //   'burn',
-  //   'loading',
-  //   'notifications'
-  // ],
+  storage: storage,
+  blacklist: [
+    'accounts',
+    'router',
+    'modal',
+    'action-sheet',
+    'toast',
+    'wallet',
+    'api',
+    'root',
+    'posts',
+    'pages',
+    'burn',
+    'loading',
+    'notifications'
+  ]
   // migrate: createMigrate(migration, { debug: false })
 };
 
@@ -72,10 +73,10 @@ const walletPersistConfig = {
   storage: storage
 };
 
-// const localAccountPersistConfig: PersistConfig<LocalUserAccountsState> = {
-//   key: 'localAccounts',
-//   storage: storage('lixi-indexeddb')
-// };
+const localAccountPersistConfig: PersistConfig<LocalUserAccountsState> = {
+  key: 'localAccounts',
+  storage: storage
+};
 
 const accountPersistConfig: PersistConfig<AccountsState> = {
   key: 'accounts',
@@ -146,7 +147,7 @@ export const serverReducer = combineReducers({
   router: routerReducer,
   wallet: walletStateReducer,
   accounts: accountReducer,
-  // localAccounts: localUserAccountReducer,
+  localAccounts: localUserAccountReducer,
   // posts: postReducer,
   // lixies: lixiReducer,
   // claims: claimReducer,
@@ -174,7 +175,7 @@ export const appReducer = combineReducers({
   router: routerReducer,
   wallet: persistReducer(walletPersistConfig, walletStateReducer),
   accounts: persistReducer(accountPersistConfig, accountReducer),
-  // localAccounts: persistReducer(localAccountPersistConfig, localUserAccountReducer),
+  localAccounts: persistReducer(localAccountPersistConfig, localUserAccountReducer),
   // posts: persistReducer(postPersistConfig, postReducer),
   // lixies: persistReducer(lixiPersistConfig, lixiReducer),
   // claims: persistReducer(claimsPersistConfig, claimReducer),
@@ -199,6 +200,7 @@ export const appReducer = combineReducers({
   // [worshipedPersonApi.reducerPath]: worshipedPersonApi.reducer,
   // [messageApi.reducerPath]: messageApi.reducer,
   // [pageMessageApi.reducerPath]: pageMessageApi.reducer,
+
   // This is use for useReduxEffect
   // Should be always at the end
   action: actionReducer

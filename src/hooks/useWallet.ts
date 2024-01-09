@@ -406,10 +406,12 @@ const useWallet = () => {
     is selected, not when the active wallet changes state
     */
   useEffect(() => {
-    (async () => {
-      await initializeWebsocket(walletState);
-      // dispatch(activateWallet(walletState.mnemonic));
-    })();
+    if (walletState.mnemonic) {
+      (async () => {
+        await initializeWebsocket(walletState);
+        // dispatch(activateWallet(walletState.mnemonic));
+      })();
+    }
   }, [walletState.mnemonic]);
 
   useEffect(() => {

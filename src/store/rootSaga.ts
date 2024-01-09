@@ -9,7 +9,7 @@ import accountSaga from './account/saga';
 // import countrySaga from './country/saga';
 // import envelopeSaga from './envelope/saga';
 // import lixiSaga from './lixi/saga';
-// import localAccountSaga from './localAccount/saga';
+import localAccountSaga from './localAccount/saga';
 // import messageSaga from './message/saga';
 // import notificationSaga from './notification/saga';
 // import pageSaga from './page/saga';
@@ -26,7 +26,7 @@ export default function* rootSaga() {
   yield all([
     walletSaga(),
     accountSaga(),
-    // localAccountSaga(),
+    localAccountSaga(),
     // lixiSaga(),
     // sendSaga(),
     // claimSaga(),

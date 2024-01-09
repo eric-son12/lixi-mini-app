@@ -1,5 +1,4 @@
 import { Account } from '@models/lib/account';
-import { Upload } from '@models/lib/upload';
 import { EntityState, EntityId } from '@reduxjs/toolkit';
 
 export interface AccountsState extends EntityState<Account, any> {
@@ -7,14 +6,6 @@ export interface AccountsState extends EntityState<Account, any> {
   lixiIdsById: {
     [key: number]: Array<number>;
   };
-  envelopeUpload: Upload;
-  accountCoverUpload: Upload;
-  accountAvatarUpload: Upload;
-  pageCoverUpload: Upload;
-  pageAvatarUpload: Upload;
-  postCoverUploads: Upload[];
-  productImageUploads: Upload[];
-  messageUploads: Upload[];
   editorCache: Nullable<string> | undefined;
   leaderBoard: Account[];
   transactionReady: boolean;
@@ -37,5 +28,4 @@ export interface AccountsState extends EntityState<Account, any> {
       ]
     | [];
   accountInfoTemp: Account;
-  commentUpload: Upload;
 }

@@ -41,6 +41,7 @@ export const walletStateReducer = createReducer(initialState, builder => {
     })
     .addCase(activateWalletSuccess, (state, action) => {
       const { walletPaths, mnemonic, selectPath } = action.payload;
+      console.log('🚀 ~ .addCase ~ walletPaths:', walletPaths);
       walletAdapter.setMany(state, walletPaths);
       state.mnemonic = mnemonic;
       state.walletHasUpdated = false;

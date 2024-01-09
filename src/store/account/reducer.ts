@@ -1,6 +1,6 @@
 import { Account } from '@models/index';
 import { UPLOAD_TYPES } from '@models/constants';
-import { createEntityAdapter, createReducer, isAnyOf, Update } from '@reduxjs/toolkit';
+import { createEntityAdapter, createReducer, EntityId, isAnyOf, Update } from '@reduxjs/toolkit';
 import _ from 'lodash';
 
 import {
@@ -40,7 +40,9 @@ import {
 } from './actions';
 import { AccountsState } from './state';
 
-export const accountsAdapter = createEntityAdapter<Account>({});
+export const accountsAdapter = createEntityAdapter<Account, EntityId>({
+  selectId: account => account.id
+});
 
 const initialState: AccountsState = accountsAdapter.getInitialState({
   selectedId: null,
@@ -121,105 +123,6 @@ export const accountReducer = createReducer(initialState, builder => {
     })
     .addCase(deleteAccountSuccess, (state, action) => {
       accountsAdapter.removeOne(state, action.payload);
-    })
-    .addCase(setUpload, (state, action) => {
-      const { type, upload } = action.payload;
-
-      switch (type) {
-        case UPLOAD_TYPES.ENVELOPE:
-          state.envelopeUpload = upload;
-          break;
-        case UPLOAD_TYPES.ACCOUNT_AVATAR:
-          state.accountAvatarUpload = upload;
-          break;
-        case UPLOAD_TYPES.ACCOUNT_COVER:
-          state.accountCoverUpload = upload;
-          break;
-        case UPLOAD_TYPES.PAGE_AVATAR:
-          state.pageAvatarUpload = upload;
-          break;
-        case UPLOAD_TYPES.PAGE_COVER:
-          state.pageCoverUpload = upload;
-          break;
-        case UPLOAD_TYPES.POST:
-          state.postCoverUploads.push(upload);
-          break;
-        case UPLOAD_TYPES.MESSAGE:
-          state.messageUploads.push(upload);
-          break;
-        case UPLOAD_TYPES.COMMENT:
-          state.commentUpload = upload;
-          break;
-      }
-    })
-    .addCase(removeUpload, (state, action) => {
-      const { uploadType, id } = action.payload;
-
-      switch (uploadType) {
-        case UPLOAD_TYPES.ENVELOPE:
-          state.envelopeUpload = null;
-          break;
-        case UPLOAD_TYPES.ACCOUNT_AVATAR:
-          state.accountAvatarUpload = null;
-          break;
-        case UPLOAD_TYPES.PAGE_AVATAR:
-          state.pageAvatarUpload = null;
-          break;
-        case UPLOAD_TYPES.PAGE_COVER:
-          state.pageCoverUpload = null;
-          break;
-        case UPLOAD_TYPES.POST:
-          state.postCoverUploads = state.postCoverUploads.filter(image => {
-            return image.id !== id;
-          });
-          break;
-        case UPLOAD_TYPES.MESSAGE:
-          state.messageUploads = state.messageUploads.filter(image => {
-            return image.id !== id;
-          });
-          break;
-        case UPLOAD_TYPES.COMMENT:
-          state.commentUpload = null;
-          break;
-      }
-    })
-    .addCase(removeUploadFromCache, (state, action) => {
-      const { uploadType, id } = action.payload;
-
-      switch (uploadType) {
-        case UPLOAD_TYPES.ENVELOPE:
-          state.envelopeUpload = null;
-          break;
-        case UPLOAD_TYPES.ACCOUNT_AVATAR:
-          state.accountAvatarUpload = null;
-          break;
-        case UPLOAD_TYPES.PAGE_AVATAR:
-          state.pageAvatarUpload = null;
-          break;
-        case UPLOAD_TYPES.PAGE_COVER:
-          state.pageCoverUpload = null;
-          break;
-        case UPLOAD_TYPES.POST:
-          state.postCoverUploads = state.postCoverUploads.filter(image => {
-            return image.id !== id;
-          });
-          break;
-        case UPLOAD_TYPES.MESSAGE:
-          state.messageUploads = state.messageUploads.filter(image => {
-            return image.id !== id;
-          });
-          break;
-        case UPLOAD_TYPES.COMMENT:
-          state.commentUpload = null;
-          break;
-      }
-    })
-    .addCase(removeAllUpload, (state, action) => {
-      state.postCoverUploads.length = 0;
-      state.productImageUploads.length = 0;
-    })
-    .addCase(removeAllMessageUpload, (state, action) => {
-      state.messageUploads.length = 0;
     })
     .addCase(saveEditorTextToCache, (state, action) => {
       const tempPost = action.payload;

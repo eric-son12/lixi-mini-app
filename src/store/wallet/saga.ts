@@ -10,6 +10,7 @@ function* activateWalletSaga(action: PayloadAction<{ mnemonic: string; coin: COI
   try {
     const Wallet = callConfig.call.walletContext;
     const { mnemonic, coin } = action.payload;
+    console.log('🚀 ~ function*activateWalletSaga ~ mnemonic:', mnemonic);
     let walletPaths: WalletPathAddressInfo[];
     let defaultPath: string;
 
