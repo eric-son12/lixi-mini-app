@@ -125,6 +125,7 @@ export default function Home() {
   useEffect(() => {
     if (initData) {
       console.log('INIT DATA', initData);
+      localStorage.setItem('INIT', JSON.stringify(initData));
       // let startParams = initData?.startParam || "";
       // if (startParams) {
       //   localStorage.setItem("initDATA", JSON.stringify(initData));
