@@ -151,9 +151,9 @@ export default function Qpay() {
     mainButton.enable().show();
     backButton.show();
     if (isConfirm) {
-      mainButton.setText("Submit");
-    } else {
       mainButton.setText("Pay");
+    } else {
+      mainButton.setText("Submit");
     }
   }, [isConfirm]);
 
@@ -179,6 +179,7 @@ export default function Qpay() {
     setTimeout(() => {
       setLoading(false);
       setSuccess(true);
+      setOpen(false);
     }, 1000);
     console.log("Main button confirm clicked!");
   };

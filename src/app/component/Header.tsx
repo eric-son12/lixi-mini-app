@@ -4,6 +4,7 @@ import BackupOutlinedIcon from "@mui/icons-material/BackupOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
 import InboxOutlinedIcon from "@mui/icons-material/InboxOutlined";
+import ReceiptIcon from '@mui/icons-material/Receipt';
 import { useRouter } from "next/navigation";
 
 const Section = styled.div`
@@ -36,7 +37,7 @@ function Header(props: HeaderProps) {
   return (
     <Section>
       <div onClick={navigateQpay}>
-        <InboxOutlinedIcon />
+        <ReceiptIcon />
       </div>
       <div onClick={navigateSetting}>
         <SettingsOutlinedIcon />
