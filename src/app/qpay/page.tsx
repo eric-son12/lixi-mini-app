@@ -155,7 +155,7 @@ export default function Qpay() {
     } else {
       mainButton.setText("Pay");
     }
-  }, []);
+  }, [isConfirm]);
 
   useEffect(() => {
     mainButton.on("click", onMainButtonClick);
@@ -263,7 +263,7 @@ export default function Qpay() {
     <>
       <ContainerSend>
         <div className="send-info">
-          <img width={96} height={96} src="/send.svg" alt="" />
+          <img width={96} height={96} src="/qpay.svg" alt="" />
           <div className="header-send">
             <h2 className="title">QPay</h2>
             <div>
