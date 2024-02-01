@@ -28,9 +28,16 @@ function Header(props: HeaderProps) {
     router.push("/setting");
   };
 
+  const navigateQpay = () => {
+    router.push("/qpay");
+  };
+
+
   return (
     <Section>
-      <div>{/* <InboxOutlinedIcon /> */}</div>
+      <div onClick={navigateQpay}>
+        <InboxOutlinedIcon />
+      </div>
       <div onClick={navigateSetting}>
         <SettingsOutlinedIcon />
       </div>
