@@ -158,19 +158,29 @@ export default function Qpay() {
   }, [isConfirm]);
 
   useEffect(() => {
-    mainButton.on("click", onMainButtonClick);
+    if (isConfirm) {
+      mainButton.on("click", onMainButtonConfirmClick);
+    } else {
+      mainButton.on("click", onMainButtonClick);
+    }
     backButton.on("click", onBackButtonClick);
-  }, [mainButton, backButton]);
+  }, [mainButton, backButton, isConfirm]);
 
   const onMainButtonClick = () => {
     haptic.notificationOccurred("warning");
-    if (isConfirm) {
-      handleConfirm();
-    } else {
-      setIsConfirm(true);
-      setOpen(true);
-    }
+    setIsConfirm(true);
+    setOpen(true);
     console.log("Main button clicked!");
+  };
+
+  const onMainButtonConfirmClick = () => {
+    haptic.notificationOccurred("warning");
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setSuccess(true);
+    }, 1000);
+    console.log("Main button confirm clicked!");
   };
 
   const onBackButtonClick = () => {
