@@ -165,7 +165,7 @@ export default function Qpay() {
   const onMainButtonClick = () => {
     haptic.notificationOccurred("warning");
     if (isConfirm) {
-      handleConfirm;
+      handleConfirm();
     } else {
       setIsConfirm(true);
       setOpen(true);
